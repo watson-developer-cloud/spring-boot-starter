@@ -215,6 +215,7 @@ public class WatsonAutoConfiguration {
   public VisualRecognition visualRecognition() {
     VisualRecognition service = new VisualRecognition(vrConfig.getVersionDate());
     configUrl(service, vrConfig);
+    configBasicAuth(service, vrConfig);
     configApiKey(service, vrConfig);
     return service;
   }
