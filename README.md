@@ -1,9 +1,15 @@
 # Watson Spring Boot
 
+[![Build Status](https://travis-ci.org/watson-developer-cloud/watson-spring.svg?branch=master)](https://travis-ci.org/watson-developer-cloud/watson-spring)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ibm.watson.developer_cloud/watson-spring/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ibm.watson.developer_cloud/watson-spring)
+[![CLA assistant](https://cla-assistant.io/readme/badge/watson-developer-cloud/watson-spring)](https://cla-assistant.io/watson-developer-cloud/watson-spring)
+
 This project adds Spring Boot support for the Watson services.
 
 This means that you can now "auto-wire" any of the Watson services into your Spring Boot application
 using the standard Spring autoconfiguration framework.
+
+## Usage
 
 All you need to do is:
 
@@ -53,3 +59,27 @@ Here's an example using the Watson Conversation service:
 
 The Spring framework takes care of the rest.  Your application can now simply start
 using the service instance.
+
+## Open Source @ IBM
+
+Find more open source projects on the [IBM Github Page](http://ibm.github.io/)
+
+## License
+
+This library is licensed under Apache 2.0. Full license text is
+available in [LICENSE](LICENSE).
+
+## Contributing
+
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
+
+## Code of Conduct
+
+See [CODE_OF_CONDUCT.md](.github/CODE_OF_CONDUCT.md).
+
+### Other
+
+If you are having difficulties using the APIs or you have a question about the IBM
+Watson Services, please ask a question on
+[dW Answers](https://developer.ibm.com/answers/questions/ask/?topics=watson)
+or [Stack Overflow](http://stackoverflow.com/questions/ask?tags=ibm-watson).
