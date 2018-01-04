@@ -61,11 +61,11 @@ public class ConversationAutoConfigTest {
     try {
       Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
       apiKeyField.setAccessible(true);
-      assertEquals(Credentials.basic(username, password), (String) apiKeyField.get(conversation));
+      assertEquals(Credentials.basic(username, password), apiKeyField.get(conversation));
 
       Field versionField = Conversation.class.getDeclaredField("versionDate");
       versionField.setAccessible(true);
-      assertEquals(versionDate, (String) versionField.get(conversation));
+      assertEquals(versionDate, versionField.get(conversation));
     } catch (NoSuchFieldException | IllegalAccessException ex) {
       // This shouldn't happen
       assert false;

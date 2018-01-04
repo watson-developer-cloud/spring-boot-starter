@@ -59,7 +59,7 @@ public class TextToSpeechAutoConfigTest {
     try {
       Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
       apiKeyField.setAccessible(true);
-      assertEquals(Credentials.basic(username, password), (String) apiKeyField.get(textToSpeech));
+      assertEquals(Credentials.basic(username, password), apiKeyField.get(textToSpeech));
     } catch (NoSuchFieldException | IllegalAccessException ex) {
       // This shouldn't happen
       assert false;

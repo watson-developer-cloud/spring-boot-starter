@@ -61,11 +61,11 @@ public class PersonalityInsightsAutoConfigTest {
     try {
       Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
       apiKeyField.setAccessible(true);
-      assertEquals(Credentials.basic(username, password), (String) apiKeyField.get(personalityInsights));
+      assertEquals(Credentials.basic(username, password), apiKeyField.get(personalityInsights));
 
       Field versionField = PersonalityInsights.class.getDeclaredField("versionDate");
       versionField.setAccessible(true);
-      assertEquals(versionDate, (String) versionField.get(personalityInsights));
+      assertEquals(versionDate, versionField.get(personalityInsights));
     } catch (NoSuchFieldException | IllegalAccessException ex) {
       // This shouldn't happen
       assert false;

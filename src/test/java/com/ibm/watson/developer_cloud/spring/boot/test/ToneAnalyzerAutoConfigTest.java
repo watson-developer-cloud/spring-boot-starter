@@ -61,11 +61,11 @@ public class ToneAnalyzerAutoConfigTest {
     try {
       Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
       apiKeyField.setAccessible(true);
-      assertEquals(Credentials.basic(username, password), (String) apiKeyField.get(toneAnalyzer));
+      assertEquals(Credentials.basic(username, password), apiKeyField.get(toneAnalyzer));
 
       Field versionField = ToneAnalyzer.class.getDeclaredField("versionDate");
       versionField.setAccessible(true);
-      assertEquals(versionDate, (String) versionField.get(toneAnalyzer));
+      assertEquals(versionDate, versionField.get(toneAnalyzer));
     } catch (NoSuchFieldException | IllegalAccessException ex) {
       // This shouldn't happen
       assert false;
