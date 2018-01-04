@@ -22,7 +22,7 @@ buildscript {
 }
 
 plugins {
-    id 'net.researchgate.release' version '2.4.0'
+    id 'net.researchgate.release' version '2.6.0'
 }
 
 apply plugin: 'java'
@@ -33,8 +33,6 @@ apply plugin: 'idea'
 apply plugin: 'propdeps'
 apply plugin: 'propdeps-maven'
 
-import org.apache.tools.ant.filters.*
-
 archivesBaseName = 'spring-boot-starter'
 
 description = 'Spring Boot Starter for the IBM Watson Services'
@@ -44,10 +42,6 @@ version = new File(rootDir, 'VERSION').text.trim()
 
 // If the version says "snapshot" anywhere assume it is not a release
 ext.isReleaseVersion = !version.toUpperCase(Locale.ENGLISH).contains("SNAPSHOT")
-
-javadoc {
-    source = 'src/main/java'
-}
 
 checkstyle {
     configFile = rootProject.file('checkstyle.xml')
@@ -60,10 +54,6 @@ checkstyleMain {
 
 checkstyleTest {
     ignoreFailures = false
-}
-
-task docs(type: Javadoc) {
-    destinationDir = file("$buildDir/docs/all")
 }
 
 task copyJars(type: Copy) {
@@ -101,6 +91,7 @@ dependencies {
 
     // testing
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile 'com.github.stefanbirkner:system-rules:1.16.0'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
 }
 
@@ -113,47 +104,18 @@ test {
     }
 }
 
-afterEvaluate {
-    if (plugins.hasPlugin(JavaPlugin)) {
-        rootProject.tasks.docs {
-            source += files(sourceSets.main.allJava)
-            classpath += files(sourceSets*.compileClasspath)
-        }
-    }
-}
-
 apply plugin: 'jacoco'
 
-task codeCoverageReport(type: JacocoReport) {
-    // Gather execution data from all sub projects
-    // (change this if you e.g. want to calculate unit test/integration test coverage separately)
+task codeCoverageReport(type: JacocoReport, dependsOn: test) {
     executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-
-    // Add all relevant source sets from the sub projects
-    subprojects.each {
-        sourceSets it.sourceSets.main
-    }
+    sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+    classDirectories = files(sourceSets.main.output)
 
     reports {
-        xml.enabled true
-        xml.destination file("${buildDir}/reports/jacoco/report.xml")
-        html.enabled true
-        html.destination file("${buildDir}/reports/jacoco")
         csv.enabled false
+        html.destination file("${buildDir}/reports/jacoco")
+        xml.destination file("${buildDir}/reports/jacoco/report.xml")
     }
-}
-
-// always run the tests before generating the report
-codeCoverageReport.dependsOn {
-    subprojects*.test
-    testReport
-}
-
-task testReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/allTests")
-
-    // Include the results from the `test` task in all subprojects
-    reportOn subprojects*.test
 }
 
 release {
