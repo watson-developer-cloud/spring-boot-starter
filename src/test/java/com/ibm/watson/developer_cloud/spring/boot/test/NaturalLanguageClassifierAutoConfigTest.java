@@ -60,7 +60,7 @@ public class NaturalLanguageClassifierAutoConfigTest {
     try {
       Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
       apiKeyField.setAccessible(true);
-      assertEquals(Credentials.basic(username, password), (String) apiKeyField.get(naturalLanguageClassifier));
+      assertEquals(Credentials.basic(username, password), apiKeyField.get(naturalLanguageClassifier));
     } catch (NoSuchFieldException | IllegalAccessException ex) {
       // This shouldn't happen
       assert false;

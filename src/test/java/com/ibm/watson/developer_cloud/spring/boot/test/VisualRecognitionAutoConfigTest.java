@@ -58,11 +58,11 @@ public class VisualRecognitionAutoConfigTest {
     try {
       Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
       apiKeyField.setAccessible(true);
-      assertEquals(apiKey, (String) apiKeyField.get(visualRecognition));
+      assertEquals(apiKey, apiKeyField.get(visualRecognition));
 
       Field versionField = VisualRecognition.class.getDeclaredField("versionDate");
       versionField.setAccessible(true);
-      assertEquals(versionDate, (String) versionField.get(visualRecognition));
+      assertEquals(versionDate, versionField.get(visualRecognition));
     } catch (NoSuchFieldException | IllegalAccessException ex) {
       // This shouldn't happen
       assert false;
