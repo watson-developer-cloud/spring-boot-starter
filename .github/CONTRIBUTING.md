@@ -6,7 +6,7 @@ please ask a question on [dW Answers][dw] or [Stack Overflow][stackoverflow].
 # Issues
 
 If you encounter an issue with the Watson Spring Boot support, you are welcome to submit a
-[bug report](https://github.com/watson-developer-cloud/watson-spring/issues).
+[bug report](https://github.com/watson-developer-cloud/spring-boot-starter/issues).
 Before that, please search for similar issues. It's possible somebody has encountered this issue already.
 
 # Pull Requests
@@ -19,7 +19,7 @@ If you want to contribute to the repository, here's a quick guide:
     * Create minimal diffs - disable on save actions like reformat source code or organize imports. If you feel the source code should be reformatted create a separate PR for this change.
     * Check for unnecessary whitespace with git diff --check before committing.
   3. Make the test pass
-  4. Commit your changes:   
+  4. Commit your changes:  
     * Use the present tense (`"Add feature"` not `"Added Feature"`)
     * Use the imperative mood (`"Move cursor to…"` not `"Moves cursor to…"`)
     * Include relevant Emoji from our [Emoji cheatsheet](#emoji-cheatsheet)

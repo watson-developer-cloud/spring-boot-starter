@@ -1,8 +1,8 @@
 # Watson Spring Boot
 
-[![Build Status](https://travis-ci.org/watson-developer-cloud/watson-spring.svg?branch=master)](https://travis-ci.org/watson-developer-cloud/watson-spring)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ibm.watson.developer_cloud/watson-spring/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ibm.watson.developer_cloud/watson-spring)
-[![CLA assistant](https://cla-assistant.io/readme/badge/watson-developer-cloud/watson-spring)](https://cla-assistant.io/watson-developer-cloud/watson-spring)
+[![Build Status](https://travis-ci.org/watson-developer-cloud/spring-boot-starter.svg?branch=master)](https://travis-ci.org/watson-developer-cloud/spring-boot-starter)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ibm.watson.developer_cloud/spring-boot-starter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ibm.watson.developer_cloud/spring-boot-starter)
+[![CLA assistant](https://cla-assistant.io/readme/badge/watson-developer-cloud/spring-boot-starter)](https://cla-assistant.io/watson-developer-cloud/spring-boot-starter)
 
 This project adds Spring Boot support for the Watson services.
 
@@ -20,13 +20,13 @@ All you need to do is:
     <dependency>
       <groupId>com.ibm.watson.developer_cloud</groupId>
       <artifactId>spring-boot-starter</artifactId>
-      <version>4.2.1</version>
+      <version>0.0.1</version>
     </dependency>
     ```
 
     or in your gradle `build.gradle`, in the dependencies stanza, add
     ```
-    compile 'com.ibm.watson.developer_cloud:spring-boot-starter:4.2.1'
+    compile 'com.ibm.watson.developer_cloud:spring-boot-starter:0.0.1'
     ```
 
 2. Add your Watson service(s) credentials and version info to your application

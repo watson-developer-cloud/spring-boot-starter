@@ -21,27 +21,49 @@ buildscript {
     }
 }
 
+
 plugins {
-    id 'net.researchgate.release' version '2.6.0'
+    id 'com.github.johnrengelman.shadow' version '1.2.4'
+    id 'io.codearte.nexus-staging' version '0.11.0'
 }
 
 apply plugin: 'java'
 apply plugin: 'checkstyle'
+apply plugin: 'signing'
+apply plugin: 'maven'
+
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 
 apply plugin: 'propdeps'
 apply plugin: 'propdeps-maven'
 
-archivesBaseName = 'spring-boot-starter'
+import org.apache.tools.ant.filters.*
 
+archivesBaseName = 'spring-boot-starter'
 description = 'Spring Boot Starter for the IBM Watson Services'
 
-group = 'com.ibm.watson.developer_cloud'
-version = new File(rootDir, 'VERSION').text.trim()
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
 
-// If the version says "snapshot" anywhere assume it is not a release
-ext.isReleaseVersion = !version.toUpperCase(Locale.ENGLISH).contains("SNAPSHOT")
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+shadowJar {
+   classifier = 'jar-with-dependencies'
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+    archives shadowJar
+}
+
+project.tasks.assemble.dependsOn project.tasks.shadowJar
 
 checkstyle {
     configFile = rootProject.file('checkstyle.xml')
@@ -56,16 +78,6 @@ checkstyleTest {
     ignoreFailures = false
 }
 
-task copyJars(type: Copy) {
-    from subprojects.collect { it.tasks.withType(Jar) }
-    into "$buildDir/allJars"
-}
-
-task signJars(type: Copy) {
-    from subprojects.collect { it.tasks.withType(Sign) }
-    into "$buildDir/allJars"
-}
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -73,9 +85,12 @@ repositories {
     mavenCentral()
 }
 
-ext.watsonVersion = '4.2.1'
-ext.springVersion = '4.3.12.RELEASE'
-ext.springBootVersion = '1.5.9.RELEASE'
+processResources {
+    filter ReplaceTokens, tokens: [
+            'pom.version': project.version,
+            'build.date' : getDate()
+    ]
+}
 
 dependencies {
     // Watson Java SDK
@@ -99,8 +114,8 @@ compileJava.dependsOn(processResources)
 
 test {
     testLogging {
-        events "failed"
-        exceptionFormat "full"
+        events 'failed'
+        exceptionFormat 'full'
     }
 }
 
@@ -118,7 +133,70 @@ task codeCoverageReport(type: JacocoReport, dependsOn: test) {
     }
 }
 
-release {
-    tagTemplate = 'watson-spring-boot-$version'
+signing {
+    sign configurations.archives
 }
 
+signArchives {
+    onlyIf { Task task ->
+        def shouldExec = false
+        for (myArg in project.gradle.startParameter.taskRequests[0].args) {
+            if (myArg.toLowerCase().contains('signjars') || myArg.toLowerCase().contains('uploadarchives')) {
+                shouldExec = true
+            }
+        }
+        return shouldExec
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "http://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: System.env.CI_DEPLOY_USERNAME, password: System.env.CI_DEPLOY_PASSWORD)
+            }
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/"){
+                authentication(userName: System.env.CI_DEPLOY_USERNAME, password: System.env.CI_DEPLOY_PASSWORD)
+            }
+            pom.project {
+                name 'IBM Watson Spring boot starter'
+                packaging 'jar'
+                description 'Spring Boot Starter for the IBM Watson Services'
+                url 'https://www.ibm.com/watson/developer'
+
+                scm {
+                    connection 'scm:git:git@github.com:watson-developer-cloud/spring-boot-starter.git'
+                    developerConnection 'scm:git:git@github.com:watson-developer-cloud/spring-boot-starter.git'
+                    url 'https://github.com/watson-developer-cloud/spring-boot-starter'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'german'
+                        name 'German Attanasio'
+                        email 'germanatt@us.ibm.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
+}
+
+ext {
+    getDate = this.&getDate
+}
