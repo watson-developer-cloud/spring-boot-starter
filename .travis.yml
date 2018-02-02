@@ -19,8 +19,6 @@ before_install:
 script:
   - ./gradlew check
   - ./gradlew install -x check
-  - ./gradlew checkstyleMain
-  - ./gradlew checkstyleTest
   - ./gradlew codeCoverageReport --continue
 
 after_success:
@@ -33,10 +31,11 @@ deploy:
     on:
       repo: watson-developer-cloud/spring-boot-starter
       jdk: oraclejdk8
+      tags: true
 
   - provider: releases
     api_key: ${GITHUB_TOKEN}
-    file: spring-boot-starter/build/libs/spring-boot-starter-${TRAVIS_BRANCH}-jar-with-dependencies.jar
+    file: spring-boot-starter/build/libs/watson-spring-boot-starter-${TRAVIS_BRANCH}-jar-with-dependencies.jar
     skip_cleanup: true
     on:
       repo: watson-developer-cloud/spring-boot-starter

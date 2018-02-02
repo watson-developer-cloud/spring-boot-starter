@@ -21,7 +21,6 @@ buildscript {
     }
 }
 
-
 plugins {
     id 'com.github.johnrengelman.shadow' version '1.2.4'
     id 'io.codearte.nexus-staging' version '0.11.0'
@@ -40,7 +39,7 @@ apply plugin: 'propdeps-maven'
 
 import org.apache.tools.ant.filters.*
 
-archivesBaseName = 'spring-boot-starter'
+archivesBaseName = 'watson-spring-boot-starter'
 description = 'Spring Boot Starter for the IBM Watson Services'
 
 task sourcesJar(type: Jar) {

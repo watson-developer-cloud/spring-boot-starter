@@ -1,7 +1,7 @@
 # Release Process
 
 * code: https://github.com/watson-developer-cloud/spring-boot-starter
-* maven: http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22spring-boot-starter%22
+* maven: http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22watson-spring-boot-starter%22
 
 ## Guide to uploading artifacts to the Central Repository
 
@@ -29,15 +29,6 @@ If you are not familiar with Sonatype and/or the maven release process please re
      ```bash
      bumpversion major|minor|patch
      ```
-
-  1. Perform a release deployment to OSSRH (Staging) with:
-
-     ```bash
-     gradle release
-     ```
-
-     You will have to answer prompts for versions and tags. That will tag and commit a new version into your repository automatically.
-
 
 ### Travis setup
 
