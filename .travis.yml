@@ -35,7 +35,7 @@ deploy:
 
   - provider: releases
     api_key: ${GITHUB_TOKEN}
-    file: spring-boot-starter/build/libs/watson-spring-boot-starter-${TRAVIS_BRANCH}-jar-with-dependencies.jar
+    file: spring-boot-starter/build/libs/watson-spring-boot-starter-${TRAVIS_BRANCH:1}-jar-with-dependencies.jar
     skip_cleanup: true
     on:
       repo: watson-developer-cloud/spring-boot-starter

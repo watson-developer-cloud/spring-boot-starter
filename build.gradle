@@ -126,9 +126,10 @@ task codeCoverageReport(type: JacocoReport, dependsOn: test) {
     classDirectories = files(sourceSets.main.output)
 
     reports {
+        xml.enabled true
+        xml.destination "${buildDir}/reports/jacoco/report.xml"
         csv.enabled false
-        html.destination file("${buildDir}/reports/jacoco")
-        xml.destination file("${buildDir}/reports/jacoco/report.xml")
+        html.destination file("${buildDir}/reports/jacoco-html")
     }
 }
 
