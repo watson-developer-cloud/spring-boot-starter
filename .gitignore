@@ -27,3 +27,5 @@ target
 *.ipr
 *.iws
 
+/bin/
+scripts/secring.gpg
