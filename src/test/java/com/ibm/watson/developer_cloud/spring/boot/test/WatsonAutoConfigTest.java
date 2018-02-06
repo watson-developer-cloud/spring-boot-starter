@@ -36,10 +36,10 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = {"watson.language_translator.enabled=true"})
+@TestPropertySource(properties = {"watson.language-translator.enabled=true"})
 public class WatsonAutoConfigTest {
 
-    private static final String url = "http://watson.com/language_translator";
+    private static final String url = "http://watson.com/language-translator";
     private static final String username = "sam";
     private static final String password = "secret";
 

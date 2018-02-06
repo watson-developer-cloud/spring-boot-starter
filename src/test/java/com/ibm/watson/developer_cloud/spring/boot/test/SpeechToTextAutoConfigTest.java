@@ -35,13 +35,13 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
 @TestPropertySource(properties = {
-    "watson.speech_to_text.url=" + SpeechToTextAutoConfigTest.url,
-    "watson.speech_to_text.username=" + SpeechToTextAutoConfigTest.username,
-    "watson.speech_to_text.password=" + SpeechToTextAutoConfigTest.password
+    "watson.speech-to-text.url=" + SpeechToTextAutoConfigTest.url,
+    "watson.speech-to-text.username=" + SpeechToTextAutoConfigTest.username,
+    "watson.speech-to-text.password=" + SpeechToTextAutoConfigTest.password
 })
 public class SpeechToTextAutoConfigTest {
 
-  static final String url = "http://watson.com/speech_to_text";
+  static final String url = "http://watson.com/speech-to-text";
   static final String username = "sam";
   static final String password = "secret";
 

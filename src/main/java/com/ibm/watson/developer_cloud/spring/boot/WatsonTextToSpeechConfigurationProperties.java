@@ -19,5 +19,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = WatsonTextToSpeechConfigurationProperties.PREFIX)
 public class WatsonTextToSpeechConfigurationProperties extends WatsonConfigurationProperties {
 
-  public static final String PREFIX = "watson.text_to_speech";
+  public static final String PREFIX = "watson.text-to-speech";
 }

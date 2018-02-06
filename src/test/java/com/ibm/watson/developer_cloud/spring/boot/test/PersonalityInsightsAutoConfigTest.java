@@ -35,14 +35,14 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
 @TestPropertySource(properties = {
-    "watson.personality_insights.url=" + PersonalityInsightsAutoConfigTest.url,
-    "watson.personality_insights.username=" + PersonalityInsightsAutoConfigTest.username,
-    "watson.personality_insights.password=" + PersonalityInsightsAutoConfigTest.password,
-    "watson.personality_insights.versionDate=" + PersonalityInsightsAutoConfigTest.versionDate
+    "watson.personality-insights.url=" + PersonalityInsightsAutoConfigTest.url,
+    "watson.personality-insights.username=" + PersonalityInsightsAutoConfigTest.username,
+    "watson.personality-insights.password=" + PersonalityInsightsAutoConfigTest.password,
+    "watson.personality-insights.versionDate=" + PersonalityInsightsAutoConfigTest.versionDate
 })
 public class PersonalityInsightsAutoConfigTest {
 
-  static final String url = "http://watson.com/personality_insights";
+  static final String url = "http://watson.com/personality-insights";
   static final String username = "sam";
   static final String password = "secret";
   static final String versionDate = "2017-12-15";
