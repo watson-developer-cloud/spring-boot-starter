@@ -35,14 +35,14 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
 @TestPropertySource(properties = {
-    "watson.natural_language_understanding.url=" + NaturalLanguageUnderstandingAutoConfigTest.url,
-    "watson.natural_language_understanding.username=" + NaturalLanguageUnderstandingAutoConfigTest.username,
-    "watson.natural_language_understanding.password=" + NaturalLanguageUnderstandingAutoConfigTest.password,
-    "watson.natural_language_understanding.versionDate=" + NaturalLanguageUnderstandingAutoConfigTest.versionDate
+    "watson.natural-language-understanding.url=" + NaturalLanguageUnderstandingAutoConfigTest.url,
+    "watson.natural-language-understanding.username=" + NaturalLanguageUnderstandingAutoConfigTest.username,
+    "watson.natural-language-understanding.password=" + NaturalLanguageUnderstandingAutoConfigTest.password,
+    "watson.natural-language-understanding.versionDate=" + NaturalLanguageUnderstandingAutoConfigTest.versionDate
 })
 public class NaturalLanguageUnderstandingAutoConfigTest {
 
-  static final String url = "http://watson.com/natural_language_understanding";
+  static final String url = "http://watson.com/natural-language-understanding";
   static final String username = "sam";
   static final String password = "secret";
   static final String versionDate = "2017-12-15";

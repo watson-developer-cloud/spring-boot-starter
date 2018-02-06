@@ -19,5 +19,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = WatsonToneAnalyzerConfigurationProperties.PREFIX)
 public class WatsonToneAnalyzerConfigurationProperties extends WatsonConfigurationProperties {
 
-  public static final String PREFIX = "watson.tone_analyzer";
+  public static final String PREFIX = "watson.tone-analyzer";
 }

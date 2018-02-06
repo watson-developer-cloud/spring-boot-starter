@@ -19,5 +19,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = WatsonNaturalLanguageClassifierConfigurationProperties.PREFIX)
 public class WatsonNaturalLanguageClassifierConfigurationProperties extends WatsonConfigurationProperties {
 
-  public static final String PREFIX = "watson.natural_language_classifier";
+  public static final String PREFIX = "watson.natural-language-classifier";
 }

@@ -19,5 +19,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = WatsonLanguageTranslatorConfigurationProperties.PREFIX)
 public class WatsonLanguageTranslatorConfigurationProperties extends WatsonConfigurationProperties {
 
-  public static final String PREFIX = "watson.language_translator";
+  public static final String PREFIX = "watson.language-translator";
 }
