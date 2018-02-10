@@ -37,19 +37,15 @@ import okhttp3.Credentials;
  * The Class LanguageTranslatorAutoConfigTest.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = { "watson.language_translator.url=" + LanguageTranslatorAutoConfigTest.url,
-    "watson.language_translator.username=" + LanguageTranslatorAutoConfigTest.username,
-    "watson.language_translator.password=" + LanguageTranslatorAutoConfigTest.password })
+@ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
+@TestPropertySource(properties = {
+    "watson.language-translator.url=" + LanguageTranslatorAutoConfigTest.url,
+    "watson.language-translator.username=" + LanguageTranslatorAutoConfigTest.username,
+    "watson.language-translator.password=" + LanguageTranslatorAutoConfigTest.password
+})
 public class LanguageTranslatorAutoConfigTest {
 
-  /** The Constant password. */
-  static final String password = "secret";
-
-  /** The Constant url. */
-  static final String url = "http://watson.com/language_translator";
-
-  /** The Constant username. */
+  static final String url = "http://watson.com/language-translator";
   static final String username = "sam";
 
   @Autowired

@@ -39,19 +39,14 @@ import okhttp3.Credentials;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
 @TestPropertySource(properties = {
-    "watson.natural_language_understanding.url=" + NaturalLanguageUnderstandingAutoConfigTest.url,
-    "watson.natural_language_understanding.username=" + NaturalLanguageUnderstandingAutoConfigTest.username,
-    "watson.natural_language_understanding.password=" + NaturalLanguageUnderstandingAutoConfigTest.password,
-    "watson.natural_language_understanding.versionDate=" + NaturalLanguageUnderstandingAutoConfigTest.versionDate })
+    "watson.natural-language-understanding.url=" + NaturalLanguageUnderstandingAutoConfigTest.url,
+    "watson.natural-language-understanding.username=" + NaturalLanguageUnderstandingAutoConfigTest.username,
+    "watson.natural-language-understanding.password=" + NaturalLanguageUnderstandingAutoConfigTest.password,
+    "watson.natural-language-understanding.versionDate=" + NaturalLanguageUnderstandingAutoConfigTest.versionDate
+})
 public class NaturalLanguageUnderstandingAutoConfigTest {
 
-  /** The Constant password. */
-  static final String password = "secret";
-
-  /** The Constant url. */
-  static final String url = "http://watson.com/natural_language_understanding";
-
-  /** The Constant username. */
+  static final String url = "http://watson.com/natural-language-understanding";
   static final String username = "sam";
 
   /** The Constant versionDate. */

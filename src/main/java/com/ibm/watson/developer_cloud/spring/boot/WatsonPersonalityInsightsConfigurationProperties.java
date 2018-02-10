@@ -21,6 +21,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = WatsonPersonalityInsightsConfigurationProperties.PREFIX)
 public class WatsonPersonalityInsightsConfigurationProperties extends WatsonConfigurationProperties {
 
-  /** The Constant PREFIX. */
-  public static final String PREFIX = "watson.personality_insights";
+  public static final String PREFIX = "watson.personality-insights";
 }

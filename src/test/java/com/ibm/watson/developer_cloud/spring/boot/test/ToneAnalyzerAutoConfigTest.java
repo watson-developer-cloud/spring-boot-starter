@@ -37,20 +37,16 @@ import okhttp3.Credentials;
  * The Class ToneAnalyzerAutoConfigTest.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = { "watson.tone_analyzer.url=" + ToneAnalyzerAutoConfigTest.url,
-    "watson.tone_analyzer.username=" + ToneAnalyzerAutoConfigTest.username,
-    "watson.tone_analyzer.password=" + ToneAnalyzerAutoConfigTest.password,
-    "watson.tone_analyzer.versionDate=" + ToneAnalyzerAutoConfigTest.versionDate })
+@ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
+@TestPropertySource(properties = {
+    "watson.tone-analyzer.url=" + ToneAnalyzerAutoConfigTest.url,
+    "watson.tone-analyzer.username=" + ToneAnalyzerAutoConfigTest.username,
+    "watson.tone-analyzer.password=" + ToneAnalyzerAutoConfigTest.password,
+    "watson.tone-analyzer.versionDate=" + ToneAnalyzerAutoConfigTest.versionDate
+})
 public class ToneAnalyzerAutoConfigTest {
 
-  /** The Constant password. */
-  static final String password = "secret";
-
-  /** The Constant url. */
-  static final String url = "http://watson.com/tone_analyzer";
-
-  /** The Constant username. */
+  static final String url = "http://watson.com/tone-analyzer";
   static final String username = "sam";
 
   /** The Constant versionDate. */

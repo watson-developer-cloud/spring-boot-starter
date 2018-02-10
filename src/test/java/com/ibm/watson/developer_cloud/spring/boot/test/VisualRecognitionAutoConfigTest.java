@@ -35,13 +35,15 @@ import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
  * The Class VisualRecognitionAutoConfigTest.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = { "watson.visual_recognition.url=" + VisualRecognitionAutoConfigTest.url,
-    "watson.visual_recognition.apiKey=" + VisualRecognitionAutoConfigTest.apiKey,
-    "watson.visual_recognition.versionDate=" + VisualRecognitionAutoConfigTest.versionDate })
+@ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
+@TestPropertySource(properties = {
+    "watson.visual-recognition.url=" + VisualRecognitionAutoConfigTest.url,
+    "watson.visual-recognition.apiKey=" + VisualRecognitionAutoConfigTest.apiKey,
+    "watson.visual-recognition.versionDate=" + VisualRecognitionAutoConfigTest.versionDate
+})
 public class VisualRecognitionAutoConfigTest {
 
-  /** The Constant apiKey. */
+  static final String url = "http://watson.com/visual-recognition";
   static final String apiKey = "secret";
 
   /** The Constant url. */

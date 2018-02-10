@@ -39,18 +39,13 @@ import okhttp3.Credentials;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
 @TestPropertySource(properties = {
-    "watson.natural_language_classifier.url=" + NaturalLanguageClassifierAutoConfigTest.url,
-    "watson.natural_language_classifier.username=" + NaturalLanguageClassifierAutoConfigTest.username,
-    "watson.natural_language_classifier.password=" + NaturalLanguageClassifierAutoConfigTest.password })
+    "watson.natural-language-classifier.url=" + NaturalLanguageClassifierAutoConfigTest.url,
+    "watson.natural-language-classifier.username=" + NaturalLanguageClassifierAutoConfigTest.username,
+    "watson.natural-language-classifier.password=" + NaturalLanguageClassifierAutoConfigTest.password
+})
 public class NaturalLanguageClassifierAutoConfigTest {
 
-  /** The Constant password. */
-  static final String password = "secret";
-
-  /** The Constant url. */
-  static final String url = "http://watson.com/natural_language_classifier";
-
-  /** The Constant username. */
+  static final String url = "http://watson.com/natural-language-classifier";
   static final String username = "sam";
 
   @Autowired

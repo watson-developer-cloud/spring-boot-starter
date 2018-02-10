@@ -21,6 +21,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = WatsonVisualRecognitionConfigurationProperties.PREFIX)
 public class WatsonVisualRecognitionConfigurationProperties extends WatsonConfigurationProperties {
 
-  /** The Constant PREFIX. */
-  public static final String PREFIX = "watson.visual_recognition";
+  public static final String PREFIX = "watson.visual-recognition";
 }
