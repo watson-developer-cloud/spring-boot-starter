@@ -1,18 +1,23 @@
 /*
- * Copyright © 2017 IBM Corp. All rights reserved.
+ * Copyright 2018 IBM Corp. All Rights Reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the
- * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions
- * and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package com.ibm.watson.developer_cloud.spring.boot;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import com.ibm.watson.developer_cloud.conversation.v1.Conversation;
 import com.ibm.watson.developer_cloud.discovery.v1.Discovery;
@@ -26,33 +31,65 @@ import com.ibm.watson.developer_cloud.text_to_speech.v1.TextToSpeech;
 import com.ibm.watson.developer_cloud.tone_analyzer.v3.ToneAnalyzer;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
+/**
+ * The Class WatsonAutoConfiguration.
+ */
 @Configuration
-@EnableConfigurationProperties({
-    WatsonConversationConfigurationProperties.class,
-    WatsonDiscoveryConfigurationProperties.class,
-    WatsonLanguageTranslatorConfigurationProperties.class,
+@EnableConfigurationProperties({ WatsonConversationConfigurationProperties.class,
+    WatsonDiscoveryConfigurationProperties.class, WatsonLanguageTranslatorConfigurationProperties.class,
     WatsonNaturalLanguageClassifierConfigurationProperties.class,
     WatsonNaturalLanguageUnderstandingConfigurationProperties.class,
-    WatsonPersonalityInsightsConfigurationProperties.class,
-    WatsonSpeechToTextConfigurationProperties.class,
-    WatsonTextToSpeechConfigurationProperties.class,
-    WatsonToneAnalyzerConfigurationProperties.class,
-    WatsonVisualRecognitionConfigurationProperties.class
-})
+    WatsonPersonalityInsightsConfigurationProperties.class, WatsonSpeechToTextConfigurationProperties.class,
+    WatsonTextToSpeechConfigurationProperties.class, WatsonToneAnalyzerConfigurationProperties.class,
+    WatsonVisualRecognitionConfigurationProperties.class })
 public class WatsonAutoConfiguration {
 
-  private void configUrl(WatsonService service, WatsonConfigurationProperties config) {
-    String url = config.getUrl();
-    if (url != null) {
-      service.setEndPoint(url);
+  @Autowired
+  private WatsonConversationConfigurationProperties conversationConfig;
+
+  @Autowired
+  private WatsonDiscoveryConfigurationProperties discoveryConfig;
+
+  @Autowired
+  private WatsonLanguageTranslatorConfigurationProperties ltConfig;
+
+  // Watson Conversation service
+
+  @Autowired
+  private WatsonNaturalLanguageClassifierConfigurationProperties nlcConfig;
+
+  @Autowired
+  private WatsonNaturalLanguageUnderstandingConfigurationProperties nluConfig;
+
+  // Watson Discovery service
+
+  @Autowired
+  private WatsonPersonalityInsightsConfigurationProperties piConfig;
+
+  @Autowired
+  private WatsonSpeechToTextConfigurationProperties sttConfig;
+
+  // Watson LanguageTranslator service
+
+  @Autowired
+  private WatsonToneAnalyzerConfigurationProperties taConfig;
+
+  @Autowired
+  private WatsonTextToSpeechConfigurationProperties ttsConfig;
+
+  // Watson NaturalLanguageClassifier service
+
+  @Autowired
+  private WatsonVisualRecognitionConfigurationProperties vrConfig;
+
+  private void configApiKey(WatsonService service, WatsonConfigurationProperties config) {
+    String apiKey = config.getApiKey();
+    if (apiKey != null) {
+      service.setApiKey(apiKey);
     }
   }
+
+  // Watson NaturalLanguageUnderstanding service
 
   private void configBasicAuth(WatsonService service, WatsonConfigurationProperties config) {
     String username = config.getUsername();
@@ -62,18 +99,20 @@ public class WatsonAutoConfiguration {
     }
   }
 
-  private void configApiKey(WatsonService service, WatsonConfigurationProperties config) {
-    String apiKey = config.getApiKey();
-    if (apiKey != null) {
-      service.setApiKey(apiKey);
+  private void configUrl(WatsonService service, WatsonConfigurationProperties config) {
+    String url = config.getUrl();
+    if (url != null) {
+      service.setEndPoint(url);
     }
   }
 
-  // Watson Conversation service
+  // Watson PersonalityInsights service
 
-  @Autowired
-  private WatsonConversationConfigurationProperties conversationConfig;
-
+  /**
+   * Conversation.
+   *
+   * @return the conversation
+   */
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonConversationConfigurationProperties.PREFIX)
@@ -84,11 +123,11 @@ public class WatsonAutoConfiguration {
     return service;
   }
 
-  // Watson Discovery service
-
-  @Autowired
-  private WatsonDiscoveryConfigurationProperties discoveryConfig;
-
+  /**
+   * Discovery.
+   *
+   * @return the discovery
+   */
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonDiscoveryConfigurationProperties.PREFIX)
@@ -99,11 +138,13 @@ public class WatsonAutoConfiguration {
     return service;
   }
 
-  // Watson LanguageTranslator service
+  // Watson SpeechToText service
 
-  @Autowired
-  private WatsonLanguageTranslatorConfigurationProperties ltConfig;
-
+  /**
+   * Language translator.
+   *
+   * @return the language translator
+   */
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonLanguageTranslatorConfigurationProperties.PREFIX)
@@ -114,11 +155,11 @@ public class WatsonAutoConfiguration {
     return service;
   }
 
-  // Watson NaturalLanguageClassifier service
-
-  @Autowired
-  private WatsonNaturalLanguageClassifierConfigurationProperties nlcConfig;
-
+  /**
+   * Natural language classifier.
+   *
+   * @return the natural language classifier
+   */
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonNaturalLanguageClassifierConfigurationProperties.PREFIX)
@@ -129,11 +170,13 @@ public class WatsonAutoConfiguration {
     return service;
   }
 
-  // Watson NaturalLanguageUnderstanding service
+  // Watson TextToSpeech service
 
-  @Autowired
-  private WatsonNaturalLanguageUnderstandingConfigurationProperties nluConfig;
-
+  /**
+   * Natural language understanding.
+   *
+   * @return the natural language understanding
+   */
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonNaturalLanguageUnderstandingConfigurationProperties.PREFIX)
@@ -144,11 +187,11 @@ public class WatsonAutoConfiguration {
     return service;
   }
 
-  // Watson PersonalityInsights service
-
-  @Autowired
-  private WatsonPersonalityInsightsConfigurationProperties piConfig;
-
+  /**
+   * Personality insights.
+   *
+   * @return the personality insights
+   */
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonPersonalityInsightsConfigurationProperties.PREFIX)
@@ -159,11 +202,13 @@ public class WatsonAutoConfiguration {
     return service;
   }
 
-  // Watson SpeechToText service
+  // Watson ToneAnalyzer service
 
-  @Autowired
-  private WatsonSpeechToTextConfigurationProperties sttConfig;
-
+  /**
+   * Speech to text.
+   *
+   * @return the speech to text
+   */
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonSpeechToTextConfigurationProperties.PREFIX)
@@ -174,11 +219,11 @@ public class WatsonAutoConfiguration {
     return service;
   }
 
-  // Watson TextToSpeech service
-
-  @Autowired
-  private WatsonTextToSpeechConfigurationProperties ttsConfig;
-
+  /**
+   * Text to speech.
+   *
+   * @return the text to speech
+   */
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonTextToSpeechConfigurationProperties.PREFIX)
@@ -189,11 +234,13 @@ public class WatsonAutoConfiguration {
     return service;
   }
 
-  // Watson ToneAnalyzer service
+  // Watson VisualRecognition service
 
-  @Autowired
-  private WatsonToneAnalyzerConfigurationProperties taConfig;
-
+  /**
+   * Tone analyzer.
+   *
+   * @return the tone analyzer
+   */
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonToneAnalyzerConfigurationProperties.PREFIX)
@@ -204,11 +251,11 @@ public class WatsonAutoConfiguration {
     return service;
   }
 
-  // Watson VisualRecognition service
-
-  @Autowired
-  private WatsonVisualRecognitionConfigurationProperties vrConfig;
-
+  /**
+   * Visual recognition.
+   *
+   * @return the visual recognition
+   */
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonVisualRecognitionConfigurationProperties.PREFIX)
