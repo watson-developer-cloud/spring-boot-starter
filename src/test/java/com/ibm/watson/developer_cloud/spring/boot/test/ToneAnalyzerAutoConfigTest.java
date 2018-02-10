@@ -42,12 +42,12 @@ import okhttp3.Credentials;
     "watson.tone-analyzer.url=" + ToneAnalyzerAutoConfigTest.url,
     "watson.tone-analyzer.username=" + ToneAnalyzerAutoConfigTest.username,
     "watson.tone-analyzer.password=" + ToneAnalyzerAutoConfigTest.password,
-    "watson.tone-analyzer.versionDate=" + ToneAnalyzerAutoConfigTest.versionDate
-})
+    "watson.tone-analyzer.versionDate=" + ToneAnalyzerAutoConfigTest.versionDate })
 public class ToneAnalyzerAutoConfigTest {
 
   static final String url = "http://watson.com/tone-analyzer";
   static final String username = "sam";
+  static final String password = "secret";
 
   /** The Constant versionDate. */
   static final String versionDate = "2017-12-15";

@@ -39,15 +39,16 @@ import okhttp3.Credentials;
  * The Class WatsonAutoConfigTest.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = {"watson.language-translator.enabled=true"})
+@ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
+@TestPropertySource(properties = { "watson.language-translator.enabled=true" })
 public class WatsonAutoConfigTest {
 
-    private static final String url = "http://watson.com/language-translator";
-    private static final String username = "sam";
-    private static final String password = "secret";
-
+  private static final String url = "http://watson.com/language-translator";
   private static final String username = "sam";
+  private static final String password = "secret";
+
+  @ClassRule
+  public static final EnvironmentVariables environmentVariables = new EnvironmentVariables();
 
   static {
     String vcapServices = "{\"language_translator\":[{" + "\"credentials\": {" + "\"url\":\"" + url + "\","

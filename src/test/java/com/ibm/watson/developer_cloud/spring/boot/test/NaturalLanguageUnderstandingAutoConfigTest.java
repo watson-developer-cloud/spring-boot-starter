@@ -42,12 +42,12 @@ import okhttp3.Credentials;
     "watson.natural-language-understanding.url=" + NaturalLanguageUnderstandingAutoConfigTest.url,
     "watson.natural-language-understanding.username=" + NaturalLanguageUnderstandingAutoConfigTest.username,
     "watson.natural-language-understanding.password=" + NaturalLanguageUnderstandingAutoConfigTest.password,
-    "watson.natural-language-understanding.versionDate=" + NaturalLanguageUnderstandingAutoConfigTest.versionDate
-})
+    "watson.natural-language-understanding.versionDate=" + NaturalLanguageUnderstandingAutoConfigTest.versionDate })
 public class NaturalLanguageUnderstandingAutoConfigTest {
 
   static final String url = "http://watson.com/natural-language-understanding";
   static final String username = "sam";
+  static final String password = "secret";
 
   /** The Constant versionDate. */
   static final String versionDate = "2017-12-15";

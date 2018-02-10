@@ -37,16 +37,15 @@ import okhttp3.Credentials;
  * The Class TextToSpeechAutoConfigTest.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = {
-    "watson.text-to-speech.url=" + TextToSpeechAutoConfigTest.url,
+@ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
+@TestPropertySource(properties = { "watson.text-to-speech.url=" + TextToSpeechAutoConfigTest.url,
     "watson.text-to-speech.username=" + TextToSpeechAutoConfigTest.username,
-    "watson.text-to-speech.password=" + TextToSpeechAutoConfigTest.password
-})
+    "watson.text-to-speech.password=" + TextToSpeechAutoConfigTest.password })
 public class TextToSpeechAutoConfigTest {
 
   static final String url = "http://watson.com/text-to-speech";
   static final String username = "sam";
+  static final String password = "secret";
 
   @Autowired
   private ApplicationContext applicationContext;

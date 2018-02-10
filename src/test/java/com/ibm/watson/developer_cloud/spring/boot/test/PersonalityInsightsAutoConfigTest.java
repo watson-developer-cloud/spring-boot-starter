@@ -37,17 +37,16 @@ import okhttp3.Credentials;
  * The Class PersonalityInsightsAutoConfigTest.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = {
-    "watson.personality-insights.url=" + PersonalityInsightsAutoConfigTest.url,
+@ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
+@TestPropertySource(properties = { "watson.personality-insights.url=" + PersonalityInsightsAutoConfigTest.url,
     "watson.personality-insights.username=" + PersonalityInsightsAutoConfigTest.username,
     "watson.personality-insights.password=" + PersonalityInsightsAutoConfigTest.password,
-    "watson.personality-insights.versionDate=" + PersonalityInsightsAutoConfigTest.versionDate
-})
+    "watson.personality-insights.versionDate=" + PersonalityInsightsAutoConfigTest.versionDate })
 public class PersonalityInsightsAutoConfigTest {
 
   static final String url = "http://watson.com/personality-insights";
   static final String username = "sam";
+  static final String password = "secret";
 
   /** The Constant versionDate. */
   static final String versionDate = "2017-12-15";

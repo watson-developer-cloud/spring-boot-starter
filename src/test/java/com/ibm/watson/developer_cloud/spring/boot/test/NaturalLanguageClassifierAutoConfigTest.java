@@ -41,12 +41,12 @@ import okhttp3.Credentials;
 @TestPropertySource(properties = {
     "watson.natural-language-classifier.url=" + NaturalLanguageClassifierAutoConfigTest.url,
     "watson.natural-language-classifier.username=" + NaturalLanguageClassifierAutoConfigTest.username,
-    "watson.natural-language-classifier.password=" + NaturalLanguageClassifierAutoConfigTest.password
-})
+    "watson.natural-language-classifier.password=" + NaturalLanguageClassifierAutoConfigTest.password })
 public class NaturalLanguageClassifierAutoConfigTest {
 
   static final String url = "http://watson.com/natural-language-classifier";
   static final String username = "sam";
+  static final String password = "secret";
 
   @Autowired
   private ApplicationContext applicationContext;
