@@ -14,7 +14,7 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.developer_cloud.language_translator.v2.LanguageTranslator;
+import com.ibm.watson.developer_cloud.language_translator.v3.LanguageTranslator;
 import com.ibm.watson.developer_cloud.service.WatsonService;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
 import okhttp3.Credentials;
@@ -37,13 +37,15 @@ import static org.junit.Assert.assertNotNull;
 @TestPropertySource(properties = {
     "watson.language-translator.url=" + LanguageTranslatorAutoConfigTest.url,
     "watson.language-translator.username=" + LanguageTranslatorAutoConfigTest.username,
-    "watson.language-translator.password=" + LanguageTranslatorAutoConfigTest.password
+    "watson.language-translator.password=" + LanguageTranslatorAutoConfigTest.password,
+    "watson.language-translator.versionDate=" + LanguageTranslatorAutoConfigTest.versionDate
 })
 public class LanguageTranslatorAutoConfigTest {
 
   static final String url = "http://watson.com/language-translator";
   static final String username = "sam";
   static final String password = "secret";
+  static final String versionDate = "2018-06-12";
 
   @Autowired
   private ApplicationContext applicationContext;

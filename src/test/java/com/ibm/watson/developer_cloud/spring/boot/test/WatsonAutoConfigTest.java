@@ -14,7 +14,7 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.developer_cloud.language_translator.v2.LanguageTranslator;
+import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
 import com.ibm.watson.developer_cloud.service.WatsonService;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
 import okhttp3.Credentials;
@@ -36,10 +36,10 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = {"watson.language-translator.enabled=true"})
+@TestPropertySource(properties = {"watson.speech-to-text.enabled=true"})
 public class WatsonAutoConfigTest {
 
-    private static final String url = "http://watson.com/language-translator";
+    private static final String url = "http://watson.com/speech-to-text";
     private static final String username = "sam";
     private static final String password = "secret";
 
@@ -47,7 +47,7 @@ public class WatsonAutoConfigTest {
     public static final EnvironmentVariables environmentVariables = new EnvironmentVariables();
 
     static {
-        String vcapServices = "{\"language_translator\":[{"
+        String vcapServices = "{\"speech_to_text\":[{"
                     + "\"credentials\": {"
                         + "\"url\":\"" + url + "\","
                         + "\"username\":\"" + username + "\","
@@ -63,17 +63,16 @@ public class WatsonAutoConfigTest {
 
     @Test
     public void watsonBeanConfigFromEnvironment() {
-        LanguageTranslator languageTranslator = (LanguageTranslator) applicationContext.getBean("languageTranslator");
+        SpeechToText speechToText = (SpeechToText) applicationContext.getBean("speechToText");
 
-        assertNotNull(languageTranslator);
-        // URL is not set from VCAP_SERVICES
-        //assertEquals(url, languageTranslator.getEndPoint());
+        assertNotNull(speechToText);
+        assertEquals(url, speechToText.getEndPoint());
 
         // Verify the credentials -- which are stored in a private member variable
         try {
             Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
             apiKeyField.setAccessible(true);
-            assertEquals(Credentials.basic(username, password), apiKeyField.get(languageTranslator));
+            assertEquals(Credentials.basic(username, password), apiKeyField.get(speechToText));
         } catch (NoSuchFieldException | IllegalAccessException ex) {
             // This shouldn't happen
             assert false;
