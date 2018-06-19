@@ -14,6 +14,7 @@
 
 package com.ibm.watson.developer_cloud.spring.boot;
 
+import com.ibm.watson.developer_cloud.assistant.v1.Assistant;
 import com.ibm.watson.developer_cloud.conversation.v1.Conversation;
 import com.ibm.watson.developer_cloud.discovery.v1.Discovery;
 import com.ibm.watson.developer_cloud.language_translator.v3.LanguageTranslator;
@@ -35,6 +36,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties({
+    WatsonAssistantConfigurationProperties.class,
     WatsonConversationConfigurationProperties.class,
     WatsonDiscoveryConfigurationProperties.class,
     WatsonLanguageTranslatorConfigurationProperties.class,
@@ -78,6 +80,23 @@ public class WatsonAutoConfiguration {
       return true;
     }
     return false;
+  }
+
+  // Watson Assistant service
+
+  @Autowired
+  private WatsonAssistantConfigurationProperties assistantConfig;
+
+  @Bean
+  @ConditionalOnMissingBean
+  @ConditionalOnWatsonServiceProperties(prefix = WatsonAssistantConfigurationProperties.PREFIX)
+  public Assistant assistant() {
+    Assistant service = new Assistant(assistantConfig.getVersionDate());
+    configUrl(service, assistantConfig);
+    if (!configIamApiKey(service, assistantConfig)) {
+      configBasicAuth(service, assistantConfig);
+    }
+    return service;
   }
 
   // Watson Conversation service
