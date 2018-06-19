@@ -55,23 +55,19 @@ public class WatsonAutoConfiguration {
     }
   }
 
-  private boolean configBasicAuth(WatsonService service, WatsonConfigurationProperties config) {
+  private void configBasicAuth(WatsonService service, WatsonConfigurationProperties config) {
     String username = config.getUsername();
     String password = config.getPassword();
     if (username != null && password != null) {
       service.setUsernameAndPassword(username, password);
-      return true;
     }
-    return false;
   }
 
-  private boolean configApiKey(WatsonService service, WatsonConfigurationProperties config) {
+  private void configApiKey(WatsonService service, WatsonConfigurationProperties config) {
     String apiKey = config.getApiKey();
     if (apiKey != null) {
       service.setApiKey(apiKey);
-      return true;
     }
-    return false;
   }
 
   private boolean configIamApiKey(WatsonService service, WatsonConfigurationProperties config) {
@@ -95,8 +91,8 @@ public class WatsonAutoConfiguration {
   public Conversation conversation() {
     Conversation service = new Conversation(conversationConfig.getVersionDate());
     configUrl(service, conversationConfig);
-    if (!configBasicAuth(service, conversationConfig)) {
-      configIamApiKey(service, conversationConfig);
+    if (!configIamApiKey(service, conversationConfig)) {
+      configBasicAuth(service, conversationConfig);
     }
     return service;
   }
@@ -112,8 +108,8 @@ public class WatsonAutoConfiguration {
   public Discovery discovery() {
     Discovery service = new Discovery(discoveryConfig.getVersionDate());
     configUrl(service, discoveryConfig);
-    if (!configBasicAuth(service, discoveryConfig)) {
-      configIamApiKey(service, discoveryConfig);
+    if (!configIamApiKey(service, discoveryConfig)) {
+      configBasicAuth(service, discoveryConfig);
     }
     return service;
   }
@@ -129,8 +125,8 @@ public class WatsonAutoConfiguration {
   public LanguageTranslator languageTranslator() {
     LanguageTranslator service = new LanguageTranslator(ltConfig.getVersionDate());
     configUrl(service, ltConfig);
-    if (!configBasicAuth(service, ltConfig)) {
-      configIamApiKey(service, ltConfig);
+    if (!configIamApiKey(service, ltConfig)) {
+      configBasicAuth(service, ltConfig);
     }
     return service;
   }
@@ -146,8 +142,8 @@ public class WatsonAutoConfiguration {
   public NaturalLanguageClassifier naturalLanguageClassifier() {
     NaturalLanguageClassifier service = new NaturalLanguageClassifier();
     configUrl(service, nlcConfig);
-    if (!configBasicAuth(service, nlcConfig)) {
-      configIamApiKey(service, nlcConfig);
+    if (!configIamApiKey(service, nlcConfig)) {
+      configBasicAuth(service, nlcConfig);
     }
     return service;
   }
@@ -163,8 +159,8 @@ public class WatsonAutoConfiguration {
   public NaturalLanguageUnderstanding naturalLanguageUnderstanding() {
     NaturalLanguageUnderstanding service = new NaturalLanguageUnderstanding(nluConfig.getVersionDate());
     configUrl(service, nluConfig);
-    if (!configBasicAuth(service, nluConfig)) {
-      configIamApiKey(service, nluConfig);
+    if (!configIamApiKey(service, nluConfig)) {
+      configBasicAuth(service, nluConfig);
     }
     return service;
   }
@@ -180,8 +176,8 @@ public class WatsonAutoConfiguration {
   public PersonalityInsights personalityInsights() {
     PersonalityInsights service = new PersonalityInsights(piConfig.getVersionDate());
     configUrl(service, piConfig);
-    if (!configBasicAuth(service, piConfig)) {
-      configIamApiKey(service, piConfig);
+    if (!configIamApiKey(service, piConfig)) {
+      configBasicAuth(service, piConfig);
     }
     return service;
   }
@@ -197,8 +193,8 @@ public class WatsonAutoConfiguration {
   public SpeechToText speechToText() {
     SpeechToText service = new SpeechToText();
     configUrl(service, sttConfig);
-    if (!configBasicAuth(service, sttConfig)) {
-      configIamApiKey(service, sttConfig);
+    if (!configIamApiKey(service, sttConfig)) {
+      configBasicAuth(service, sttConfig);
     }
     return service;
   }
@@ -214,8 +210,8 @@ public class WatsonAutoConfiguration {
   public TextToSpeech textToSpeech() {
     TextToSpeech service = new TextToSpeech();
     configUrl(service, ttsConfig);
-    if (!configBasicAuth(service, ttsConfig)) {
-      configIamApiKey(service, ttsConfig);
+    if (!configIamApiKey(service, ttsConfig)) {
+      configBasicAuth(service, ttsConfig);
     }
     return service;
   }
@@ -231,8 +227,8 @@ public class WatsonAutoConfiguration {
   public ToneAnalyzer toneAnalyzer() {
     ToneAnalyzer service = new ToneAnalyzer(taConfig.getVersionDate());
     configUrl(service, taConfig);
-    if (!configBasicAuth(service, taConfig)) {
-      configIamApiKey(service, taConfig);
+    if (!configIamApiKey(service, taConfig)) {
+      configBasicAuth(service, taConfig);
     }
     return service;
   }
@@ -248,10 +244,10 @@ public class WatsonAutoConfiguration {
   public VisualRecognition visualRecognition() {
     VisualRecognition service = new VisualRecognition(vrConfig.getVersionDate());
     configUrl(service, vrConfig);
-    if (!configBasicAuth(service, vrConfig)) {
-      configIamApiKey(service, vrConfig);
+    if (!configIamApiKey(service, vrConfig)) {
+      configBasicAuth(service, vrConfig);
+      configApiKey(service, vrConfig);
     }
-    configApiKey(service, vrConfig);
     return service;
   }
 
