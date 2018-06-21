@@ -18,7 +18,6 @@ import com.ibm.watson.developer_cloud.assistant.v1.Assistant;
 import com.ibm.watson.developer_cloud.service.WatsonService;
 import com.ibm.watson.developer_cloud.service.security.IamTokenManager;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
-import okhttp3.Credentials;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
