@@ -28,6 +28,9 @@ public class WatsonConfigurationProperties {
   /** Watson service API key. */
   private String apiKey;
 
+  /** Watson service IAM API key. */
+  private String iamApiKey;
+
   /** Watson service versionDate. */
   private String versionDate;
 
@@ -45,6 +48,10 @@ public class WatsonConfigurationProperties {
 
   public void setApiKey(String apiKey) {
     this.apiKey = apiKey;
+  }
+
+  public void setIamApiKey(String apiKey) {
+    this.iamApiKey = apiKey;
   }
 
   public void setVersionDate(String versionDate) {
@@ -65,6 +72,10 @@ public class WatsonConfigurationProperties {
 
   public String getApiKey() {
     return apiKey;
+  }
+
+  public String getIamApiKey() {
+    return iamApiKey;
   }
 
   public String getVersionDate() {

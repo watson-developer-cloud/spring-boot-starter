@@ -14,7 +14,7 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.developer_cloud.language_translator.v3.LanguageTranslator;
+import com.ibm.watson.developer_cloud.assistant.v1.Assistant;
 import com.ibm.watson.developer_cloud.service.WatsonService;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
 import okhttp3.Credentials;
@@ -35,33 +35,37 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
 @TestPropertySource(properties = {
-    "watson.language-translator.url=" + LanguageTranslatorAutoConfigTest.url,
-    "watson.language-translator.username=" + LanguageTranslatorAutoConfigTest.username,
-    "watson.language-translator.password=" + LanguageTranslatorAutoConfigTest.password,
-    "watson.language-translator.versionDate=" + LanguageTranslatorAutoConfigTest.versionDate
+        "watson.assistant.url=" + AssistantAutoConfigTest.url,
+        "watson.assistant.username=" + AssistantAutoConfigTest.username,
+        "watson.assistant.password=" + AssistantAutoConfigTest.password,
+        "watson.assistant.versionDate=" + AssistantAutoConfigTest.versionDate
 })
-public class LanguageTranslatorAutoConfigTest {
+public class AssistantAutoConfigTest {
 
-  static final String url = "http://watson.com/language-translator";
+  static final String url = "http://watson.com/assistant";
   static final String username = "sam";
   static final String password = "secret";
-  static final String versionDate = "2018-06-12";
+  static final String versionDate = "2017-12-15";
 
   @Autowired
   private ApplicationContext applicationContext;
 
   @Test
-  public void languageTranslatorBeanConfig() {
-    LanguageTranslator languageTranslator = (LanguageTranslator) applicationContext.getBean("languageTranslator");
+  public void assistantBeanConfig() {
+    Assistant assistant = (Assistant) applicationContext.getBean("assistant");
 
-    assertNotNull(languageTranslator);
-    assertEquals(url, languageTranslator.getEndPoint());
+    assertNotNull(assistant);
+    assertEquals(url, assistant.getEndPoint());
 
-    // Verify the credentials -- which are stored in a private member variables
+    // Verify the credentials and versionDate -- which are stored in private member variables
     try {
       Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
       apiKeyField.setAccessible(true);
-      assertEquals(Credentials.basic(username, password), apiKeyField.get(languageTranslator));
+      assertEquals(Credentials.basic(username, password), apiKeyField.get(assistant));
+
+      Field versionField = Assistant.class.getDeclaredField("versionDate");
+      versionField.setAccessible(true);
+      assertEquals(versionDate, versionField.get(assistant));
     } catch (NoSuchFieldException | IllegalAccessException ex) {
       // This shouldn't happen
       assert false;

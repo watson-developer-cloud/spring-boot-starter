@@ -20,13 +20,13 @@ All you need to do is:
     <dependency>
       <groupId>com.ibm.watson.developer_cloud</groupId>
       <artifactId>watson-spring-boot-starter</artifactId>
-      <version>0.1.0</version>
+      <version>0.2.0</version>
     </dependency>
     ```
 
     or in your gradle `build.gradle`, in the dependencies stanza, add
     ```
-    compile 'com.ibm.watson.developer_cloud:watson-spring-boot-starter:0.1.0'
+    compile 'com.ibm.watson.developer_cloud:watson-spring-boot-starter:0.2.0'
     ```
 
 2. Add your Watson service(s) credentials and version info to your application
@@ -36,7 +36,7 @@ use a different location. The properties to add are:
 
   - `watson.<service>.url`: The base URL for the service.  This can be omitted if your
   service uses the default service url
-  - `watson.<service>.username` and `watson.<service>.password` OR `watson.<service>.apiKey`:
+  - `watson.<service>.username` and `watson.<service>.password` OR `watson.<service>.apiKey` OR `watson.<service>.iamApiKey`:
   The credentials for accessing the service.
   The credentials can be omitted from the application properties file if they are
   supplied through the `VCAP_SERVICES` environment variable.

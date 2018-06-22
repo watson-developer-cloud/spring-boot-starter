@@ -23,8 +23,11 @@ public class WatsonServiceCondition implements Condition {
     String url = conditionContext.getEnvironment().getProperty(prefix + ".url");
     String username = conditionContext.getEnvironment().getProperty(prefix + ".username");
     String password = conditionContext.getEnvironment().getProperty(prefix + ".password");
+    String apiKey = conditionContext.getEnvironment().getProperty(prefix + ".apiKey");
+    String iamApiKey = conditionContext.getEnvironment().getProperty(prefix + ".iamApiKey");
     String versionDate = conditionContext.getEnvironment().getProperty(prefix + ".versionDate");
-    if (url != null || username != null || password != null || versionDate != null) {
+    if (url != null || username != null || password != null || versionDate != null
+            || apiKey != null || iamApiKey != null) {
       return true;
     }
 

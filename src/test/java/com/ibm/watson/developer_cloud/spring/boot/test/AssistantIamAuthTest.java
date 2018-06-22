@@ -14,13 +14,11 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
+import com.ibm.watson.developer_cloud.assistant.v1.Assistant;
 import com.ibm.watson.developer_cloud.service.WatsonService;
+import com.ibm.watson.developer_cloud.service.security.IamTokenManager;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
-import okhttp3.Credentials;
-import org.junit.ClassRule;
 import org.junit.Test;
-import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -36,43 +34,39 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = {"watson.speech-to-text.enabled=true"})
-public class WatsonAutoConfigTest {
+@TestPropertySource(properties = {
+        "watson.assistant.url=" + AssistantIamAuthTest.url,
+        "watson.assistant.iamApiKey=" + AssistantIamAuthTest.iamApiKey,
+        "watson.assistant.versionDate=" + AssistantIamAuthTest.versionDate
+})
+public class AssistantIamAuthTest {
 
-    private static final String url = "http://watson.com/speech-to-text";
-    private static final String username = "sam";
-    private static final String password = "secret";
-
-    @ClassRule
-    public static final EnvironmentVariables environmentVariables = new EnvironmentVariables();
-
-    static {
-        String vcapServices = "{\"speech_to_text\":[{"
-                    + "\"credentials\": {"
-                        + "\"url\":\"" + url + "\","
-                        + "\"username\":\"" + username + "\","
-                        + "\"password\":\"" + password + "\""
-                    + "},"
-                    + "\"plan\": \"free\""
-                + "}]}";
-        environmentVariables.set("VCAP_SERVICES", vcapServices);
-    }
+    static final String url = "http://watson.com/assistant";
+    static final String iamApiKey = "super-secret-apikey";
+    static final String versionDate = "2017-12-15";
 
     @Autowired
     private ApplicationContext applicationContext;
 
     @Test
-    public void watsonBeanConfigFromEnvironment() {
-        SpeechToText speechToText = (SpeechToText) applicationContext.getBean("speechToText");
+    public void assistantBeanConfig() {
+        Assistant assistant = (Assistant) applicationContext.getBean("assistant");
 
-        assertNotNull(speechToText);
-        assertEquals(url, speechToText.getEndPoint());
+        assertNotNull(assistant);
+        assertEquals(url, assistant.getEndPoint());
 
-        // Verify the credentials -- which are stored in a private member variable
+        // Verify the credentials and versionDate -- which are stored in private member variables
         try {
-            Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
-            apiKeyField.setAccessible(true);
-            assertEquals(Credentials.basic(username, password), apiKeyField.get(speechToText));
+            Field iamTokenManagerField = WatsonService.class.getDeclaredField("tokenManager");
+            iamTokenManagerField.setAccessible(true);
+            IamTokenManager tokenManager = (IamTokenManager) iamTokenManagerField.get(assistant);
+            Field iamApiKeyField = IamTokenManager.class.getDeclaredField("apiKey");
+            iamApiKeyField.setAccessible(true);
+            assertEquals(iamApiKey, iamApiKeyField.get(tokenManager));
+
+            Field versionField = Assistant.class.getDeclaredField("versionDate");
+            versionField.setAccessible(true);
+            assertEquals(versionDate, versionField.get(assistant));
         } catch (NoSuchFieldException | IllegalAccessException ex) {
             // This shouldn't happen
             assert false;
