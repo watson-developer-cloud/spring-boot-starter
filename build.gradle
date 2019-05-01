@@ -82,6 +82,9 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url 'http://repo.spring.io/libs-release' }
+    maven { url 'https://dl.bintray.com/ibm-cloud-sdks/ibm-cloud-sdk-repo' }
+
 }
 
 processResources {
@@ -93,7 +96,7 @@ processResources {
 
 dependencies {
     // Watson Java SDK
-    compile group: 'com.ibm.watson.developer_cloud', name: 'java-sdk', version: watsonVersion
+    compile group: 'com.ibm.watson', name: 'ibm-watson', version: watsonVersion
 
     // Spring
     compile group: 'org.springframework', name: 'spring-core', version: springVersion

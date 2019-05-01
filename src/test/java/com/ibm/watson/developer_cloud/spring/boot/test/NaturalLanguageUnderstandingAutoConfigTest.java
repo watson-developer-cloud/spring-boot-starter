@@ -14,8 +14,8 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
-import com.ibm.watson.developer_cloud.service.WatsonService;
+import com.ibm.watson.natural_language_understanding.v1.NaturalLanguageUnderstanding;
+import com.ibm.cloud.sdk.core.service.BaseService;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
 import okhttp3.Credentials;
 import org.junit.Test;
@@ -33,13 +33,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
 @TestPropertySource(properties = {
     "watson.natural-language-understanding.url=" + NaturalLanguageUnderstandingAutoConfigTest.url,
     "watson.natural-language-understanding.username=" + NaturalLanguageUnderstandingAutoConfigTest.username,
     "watson.natural-language-understanding.password=" + NaturalLanguageUnderstandingAutoConfigTest.password,
-    "watson.natural-language-understanding.versionDate=" + NaturalLanguageUnderstandingAutoConfigTest.versionDate
-})
+    "watson.natural-language-understanding.versionDate=" + NaturalLanguageUnderstandingAutoConfigTest.versionDate })
 public class NaturalLanguageUnderstandingAutoConfigTest {
 
   static final String url = "http://watson.com/natural-language-understanding";
@@ -52,15 +51,16 @@ public class NaturalLanguageUnderstandingAutoConfigTest {
 
   @Test
   public void naturalLanguageUnderstandingBeanConfig() {
-    NaturalLanguageUnderstanding naturalLanguageUnderstanding =
-            (NaturalLanguageUnderstanding) applicationContext.getBean("naturalLanguageUnderstanding");
+    NaturalLanguageUnderstanding naturalLanguageUnderstanding = (NaturalLanguageUnderstanding) applicationContext
+        .getBean("naturalLanguageUnderstanding");
 
     assertNotNull(naturalLanguageUnderstanding);
     assertEquals(url, naturalLanguageUnderstanding.getEndPoint());
 
-    // Verify the credentials and versionDate -- which are stored in private member variables
+    // Verify the credentials and versionDate -- which are stored in private member
+    // variables
     try {
-      Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
+      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
       apiKeyField.setAccessible(true);
       assertEquals(Credentials.basic(username, password), apiKeyField.get(naturalLanguageUnderstanding));
 

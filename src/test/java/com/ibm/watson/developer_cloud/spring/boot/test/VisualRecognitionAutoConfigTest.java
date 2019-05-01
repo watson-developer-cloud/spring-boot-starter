@@ -14,9 +14,15 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
-import com.ibm.watson.developer_cloud.service.WatsonService;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.lang.reflect.Field;
+
+import com.ibm.cloud.sdk.core.service.BaseService;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
+import com.ibm.watson.visual_recognition.v3.VisualRecognition;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +32,11 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import java.lang.reflect.Field;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = {
-    "watson.visual-recognition.url=" + VisualRecognitionAutoConfigTest.url,
+@ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
+@TestPropertySource(properties = { "watson.visual-recognition.url=" + VisualRecognitionAutoConfigTest.url,
     "watson.visual-recognition.apiKey=" + VisualRecognitionAutoConfigTest.apiKey,
-    "watson.visual-recognition.versionDate=" + VisualRecognitionAutoConfigTest.versionDate
-})
+    "watson.visual-recognition.versionDate=" + VisualRecognitionAutoConfigTest.versionDate })
 public class VisualRecognitionAutoConfigTest {
 
   static final String url = "http://watson.com/visual-recognition";
@@ -54,9 +53,10 @@ public class VisualRecognitionAutoConfigTest {
     assertNotNull(visualRecognition);
     assertEquals(url, visualRecognition.getEndPoint());
 
-    // Verify the credentials and versionDate -- which are stored in private member variables
+    // Verify the credentials and versionDate -- which are stored in private member
+    // variables
     try {
-      Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
+      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
       apiKeyField.setAccessible(true);
       assertEquals(apiKey, apiKeyField.get(visualRecognition));
 

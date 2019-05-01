@@ -16,8 +16,8 @@ package com.ibm.watson.developer_cloud.spring.boot;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = WatsonConversationConfigurationProperties.PREFIX)
-public class WatsonConversationConfigurationProperties extends WatsonConfigurationProperties {
+@ConfigurationProperties(prefix = WatsonAssistantConfigurationProperties.PREFIX)
+public class WatsonCompareComplyConfigurationProperties extends WatsonConfigurationProperties {
 
-  public static final String PREFIX = "watson.conversation";
+    public static final String PREFIX = "watson.compare-comply";
 }
