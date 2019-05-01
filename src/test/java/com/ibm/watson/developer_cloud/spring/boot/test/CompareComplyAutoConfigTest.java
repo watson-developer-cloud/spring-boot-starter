@@ -37,7 +37,7 @@ import static org.junit.Assert.assertNotNull;
 @TestPropertySource(properties = { "watson.compare-comply.url=" + CompareComplyAutoConfigTest.url,
         "watson.compare-comply.username=" + CompareComplyAutoConfigTest.username,
         "watson.compare-comply.password=" + CompareComplyAutoConfigTest.password,
-        "watson.compare-comply.versionDate=2017-12-15" })
+        "watson.compare-comply.versionDate=" + CompareComplyAutoConfigTest.versionDate })
 public class CompareComplyAutoConfigTest {
 
     static final String url = "http://watson.com/compare-comply";
