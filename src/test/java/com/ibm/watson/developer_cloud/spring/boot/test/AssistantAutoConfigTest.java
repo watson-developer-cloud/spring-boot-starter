@@ -14,8 +14,8 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.developer_cloud.assistant.v1.Assistant;
-import com.ibm.watson.developer_cloud.service.WatsonService;
+import com.ibm.cloud.sdk.core.service.BaseService;
+import com.ibm.watson.assistant.v1.Assistant;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
 import okhttp3.Credentials;
 import org.junit.Test;
@@ -33,13 +33,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = {
-        "watson.assistant.url=" + AssistantAutoConfigTest.url,
-        "watson.assistant.username=" + AssistantAutoConfigTest.username,
-        "watson.assistant.password=" + AssistantAutoConfigTest.password,
-        "watson.assistant.versionDate=" + AssistantAutoConfigTest.versionDate
-})
+@ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
+@TestPropertySource(properties = { "watson.assistant.url=" + AssistantAutoConfigTest.url,
+    "watson.assistant.username=" + AssistantAutoConfigTest.username,
+    "watson.assistant.password=" + AssistantAutoConfigTest.password,
+    "watson.assistant.versionDate=" + AssistantAutoConfigTest.versionDate })
 public class AssistantAutoConfigTest {
 
   static final String url = "http://watson.com/assistant";
@@ -57,9 +55,10 @@ public class AssistantAutoConfigTest {
     assertNotNull(assistant);
     assertEquals(url, assistant.getEndPoint());
 
-    // Verify the credentials and versionDate -- which are stored in private member variables
+    // Verify the credentials and versionDate -- which are stored in private member
+    // variables
     try {
-      Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
+      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
       apiKeyField.setAccessible(true);
       assertEquals(Credentials.basic(username, password), apiKeyField.get(assistant));
 

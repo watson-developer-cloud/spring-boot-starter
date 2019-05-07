@@ -14,8 +14,8 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.developer_cloud.language_translator.v3.LanguageTranslator;
-import com.ibm.watson.developer_cloud.service.WatsonService;
+import com.ibm.cloud.sdk.core.service.BaseService;
+import com.ibm.watson.language_translator.v3.LanguageTranslator;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
 import okhttp3.Credentials;
 import org.junit.Test;
@@ -33,13 +33,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = {
-    "watson.language-translator.url=" + LanguageTranslatorAutoConfigTest.url,
+@ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
+@TestPropertySource(properties = { "watson.language-translator.url=" + LanguageTranslatorAutoConfigTest.url,
     "watson.language-translator.username=" + LanguageTranslatorAutoConfigTest.username,
     "watson.language-translator.password=" + LanguageTranslatorAutoConfigTest.password,
-    "watson.language-translator.versionDate=" + LanguageTranslatorAutoConfigTest.versionDate
-})
+    "watson.language-translator.versionDate=" + LanguageTranslatorAutoConfigTest.versionDate })
 public class LanguageTranslatorAutoConfigTest {
 
   static final String url = "http://watson.com/language-translator";
@@ -59,7 +57,7 @@ public class LanguageTranslatorAutoConfigTest {
 
     // Verify the credentials -- which are stored in a private member variables
     try {
-      Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
+      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
       apiKeyField.setAccessible(true);
       assertEquals(Credentials.basic(username, password), apiKeyField.get(languageTranslator));
     } catch (NoSuchFieldException | IllegalAccessException ex) {

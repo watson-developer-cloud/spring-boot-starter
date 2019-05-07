@@ -14,10 +14,15 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
-import com.ibm.watson.developer_cloud.service.WatsonService;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.lang.reflect.Field;
+
+import com.ibm.cloud.sdk.core.service.BaseService;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
-import okhttp3.Credentials;
+import com.ibm.watson.speech_to_text.v1.SpeechToText;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +32,13 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import java.lang.reflect.Field;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import okhttp3.Credentials;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = {
-    "watson.speech-to-text.url=" + SpeechToTextAutoConfigTest.url,
+@ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
+@TestPropertySource(properties = { "watson.speech-to-text.url=" + SpeechToTextAutoConfigTest.url,
     "watson.speech-to-text.username=" + SpeechToTextAutoConfigTest.username,
-    "watson.speech-to-text.password=" + SpeechToTextAutoConfigTest.password
-})
+    "watson.speech-to-text.password=" + SpeechToTextAutoConfigTest.password })
 public class SpeechToTextAutoConfigTest {
 
   static final String url = "http://watson.com/speech-to-text";
@@ -57,7 +57,7 @@ public class SpeechToTextAutoConfigTest {
 
     // Verify the credentials -- which are stored in private member variable
     try {
-      Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
+      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
       apiKeyField.setAccessible(true);
       assertEquals(Credentials.basic(username, password), apiKeyField.get(speechToText));
     } catch (NoSuchFieldException | IllegalAccessException ex) {

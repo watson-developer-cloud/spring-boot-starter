@@ -14,19 +14,19 @@
 
 package com.ibm.watson.developer_cloud.spring.boot;
 
-import com.ibm.watson.developer_cloud.assistant.v1.Assistant;
-import com.ibm.watson.developer_cloud.conversation.v1.Conversation;
-import com.ibm.watson.developer_cloud.discovery.v1.Discovery;
-import com.ibm.watson.developer_cloud.language_translator.v3.LanguageTranslator;
-import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier;
-import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
-import com.ibm.watson.developer_cloud.personality_insights.v3.PersonalityInsights;
-import com.ibm.watson.developer_cloud.service.WatsonService;
-import com.ibm.watson.developer_cloud.service.security.IamOptions;
-import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
-import com.ibm.watson.developer_cloud.text_to_speech.v1.TextToSpeech;
-import com.ibm.watson.developer_cloud.tone_analyzer.v3.ToneAnalyzer;
-import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
+import com.ibm.cloud.sdk.core.service.BaseService;
+import com.ibm.cloud.sdk.core.service.security.IamOptions;
+import com.ibm.watson.assistant.v1.Assistant;
+import com.ibm.watson.compare_comply.v1.CompareComply;
+import com.ibm.watson.discovery.v1.Discovery;
+import com.ibm.watson.language_translator.v3.LanguageTranslator;
+import com.ibm.watson.natural_language_classifier.v1.NaturalLanguageClassifier;
+import com.ibm.watson.natural_language_understanding.v1.NaturalLanguageUnderstanding;
+import com.ibm.watson.personality_insights.v3.PersonalityInsights;
+import com.ibm.watson.speech_to_text.v1.SpeechToText;
+import com.ibm.watson.text_to_speech.v1.TextToSpeech;
+import com.ibm.watson.tone_analyzer.v3.ToneAnalyzer;
+import com.ibm.watson.visual_recognition.v3.VisualRecognition;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -35,29 +35,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties({
-    WatsonAssistantConfigurationProperties.class,
-    WatsonConversationConfigurationProperties.class,
-    WatsonDiscoveryConfigurationProperties.class,
-    WatsonLanguageTranslatorConfigurationProperties.class,
-    WatsonNaturalLanguageClassifierConfigurationProperties.class,
+@EnableConfigurationProperties({ WatsonAssistantConfigurationProperties.class,
+    WatsonCompareComplyConfigurationProperties.class, WatsonDiscoveryConfigurationProperties.class,
+    WatsonLanguageTranslatorConfigurationProperties.class, WatsonNaturalLanguageClassifierConfigurationProperties.class,
     WatsonNaturalLanguageUnderstandingConfigurationProperties.class,
-    WatsonPersonalityInsightsConfigurationProperties.class,
-    WatsonSpeechToTextConfigurationProperties.class,
-    WatsonTextToSpeechConfigurationProperties.class,
-    WatsonToneAnalyzerConfigurationProperties.class,
-    WatsonVisualRecognitionConfigurationProperties.class
-})
+    WatsonPersonalityInsightsConfigurationProperties.class, WatsonSpeechToTextConfigurationProperties.class,
+    WatsonTextToSpeechConfigurationProperties.class, WatsonToneAnalyzerConfigurationProperties.class,
+    WatsonVisualRecognitionConfigurationProperties.class })
 public class WatsonAutoConfiguration {
 
-  private void configUrl(WatsonService service, WatsonConfigurationProperties config) {
+  private void configUrl(BaseService service, WatsonConfigurationProperties config) {
     String url = config.getUrl();
     if (url != null) {
       service.setEndPoint(url);
     }
   }
 
-  private void configAuth(WatsonService service, WatsonConfigurationProperties config) {
+  private void configAuth(BaseService service, WatsonConfigurationProperties config) {
     String iamApiKey = config.getIamApiKey();
     if (iamApiKey != null) {
       IamOptions options = new IamOptions.Builder().apiKey(iamApiKey).build();
@@ -92,18 +86,18 @@ public class WatsonAutoConfiguration {
     return service;
   }
 
-  // Watson Conversation service
+  // Watson Compare and Comply
 
   @Autowired
-  private WatsonConversationConfigurationProperties conversationConfig;
+  private WatsonCompareComplyConfigurationProperties compareComplyConfig;
 
   @Bean
   @ConditionalOnMissingBean
-  @ConditionalOnWatsonServiceProperties(prefix = WatsonConversationConfigurationProperties.PREFIX)
-  public Conversation conversation() {
-    Conversation service = new Conversation(conversationConfig.getVersionDate());
-    configUrl(service, conversationConfig);
-    configAuth(service, conversationConfig);
+  @ConditionalOnWatsonServiceProperties(prefix = WatsonCompareComplyConfigurationProperties.PREFIX)
+  public CompareComply compareComply() {
+    CompareComply service = new CompareComply(compareComplyConfig.getVersionDate());
+    configUrl(service, compareComplyConfig);
+    configAuth(service, compareComplyConfig);
     return service;
   }
 

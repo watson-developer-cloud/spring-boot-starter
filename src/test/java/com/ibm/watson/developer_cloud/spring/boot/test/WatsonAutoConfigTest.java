@@ -14,10 +14,15 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
-import com.ibm.watson.developer_cloud.service.WatsonService;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.lang.reflect.Field;
+
+import com.ibm.cloud.sdk.core.service.BaseService;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
-import okhttp3.Credentials;
+import com.ibm.watson.speech_to_text.v1.SpeechToText;
+
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
@@ -29,14 +34,11 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import java.lang.reflect.Field;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import okhttp3.Credentials;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = {"watson.speech-to-text.enabled=true"})
+@ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
+@TestPropertySource(properties = { "watson.speech-to-text.enabled=true" })
 public class WatsonAutoConfigTest {
 
     private static final String url = "http://watson.com/speech-to-text";
@@ -47,14 +49,9 @@ public class WatsonAutoConfigTest {
     public static final EnvironmentVariables environmentVariables = new EnvironmentVariables();
 
     static {
-        String vcapServices = "{\"speech_to_text\":[{"
-                    + "\"credentials\": {"
-                        + "\"url\":\"" + url + "\","
-                        + "\"username\":\"" + username + "\","
-                        + "\"password\":\"" + password + "\""
-                    + "},"
-                    + "\"plan\": \"free\""
-                + "}]}";
+        String vcapServices = "{\"speech_to_text\":[{" + "\"credentials\": {" + "\"url\":\"" + url + "\","
+                + "\"username\":\"" + username + "\"," + "\"password\":\"" + password + "\"" + "},"
+                + "\"plan\": \"free\"" + "}]}";
         environmentVariables.set("VCAP_SERVICES", vcapServices);
     }
 
@@ -70,7 +67,7 @@ public class WatsonAutoConfigTest {
 
         // Verify the credentials -- which are stored in a private member variable
         try {
-            Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
+            Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
             apiKeyField.setAccessible(true);
             assertEquals(Credentials.basic(username, password), apiKeyField.get(speechToText));
         } catch (NoSuchFieldException | IllegalAccessException ex) {

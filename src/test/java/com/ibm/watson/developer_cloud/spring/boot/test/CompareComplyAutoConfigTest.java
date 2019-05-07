@@ -14,10 +14,10 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
+import com.ibm.watson.compare_comply.v1.CompareComply;
 import com.ibm.cloud.sdk.core.service.BaseService;
-import com.ibm.watson.assistant.v1.Assistant;
-import com.ibm.cloud.sdk.core.service.security.IamTokenManager;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
+import okhttp3.Credentials;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,38 +34,37 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = { "watson.assistant.url=" + AssistantIamAuthTest.url,
-        "watson.assistant.iamApiKey=" + AssistantIamAuthTest.iamApiKey,
-        "watson.assistant.versionDate=" + AssistantIamAuthTest.versionDate })
-public class AssistantIamAuthTest {
+@TestPropertySource(properties = { "watson.compare-comply.url=" + CompareComplyAutoConfigTest.url,
+        "watson.compare-comply.username=" + CompareComplyAutoConfigTest.username,
+        "watson.compare-comply.password=" + CompareComplyAutoConfigTest.password,
+        "watson.compare-comply.versionDate=" + CompareComplyAutoConfigTest.versionDate })
+public class CompareComplyAutoConfigTest {
 
-    static final String url = "http://watson.com/assistant";
-    static final String iamApiKey = "super-secret-apikey";
+    static final String url = "http://watson.com/compare-comply";
+    static final String username = "sam";
+    static final String password = "secret";
     static final String versionDate = "2017-12-15";
 
     @Autowired
     private ApplicationContext applicationContext;
 
     @Test
-    public void assistantBeanConfig() {
-        Assistant assistant = (Assistant) applicationContext.getBean("assistant");
+    public void compareComplyBeanConfig() {
+        CompareComply compareComply = (CompareComply) applicationContext.getBean("compareComply");
 
-        assertNotNull(assistant);
-        assertEquals(url, assistant.getEndPoint());
+        assertNotNull(compareComply);
+        assertEquals(url, compareComply.getEndPoint());
 
         // Verify the credentials and versionDate -- which are stored in private member
         // variables
         try {
-            Field iamTokenManagerField = BaseService.class.getDeclaredField("tokenManager");
-            iamTokenManagerField.setAccessible(true);
-            IamTokenManager tokenManager = (IamTokenManager) iamTokenManagerField.get(assistant);
-            Field iamApiKeyField = IamTokenManager.class.getDeclaredField("apiKey");
-            iamApiKeyField.setAccessible(true);
-            assertEquals(iamApiKey, iamApiKeyField.get(tokenManager));
+            Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
+            apiKeyField.setAccessible(true);
+            assertEquals(Credentials.basic(username, password), apiKeyField.get(compareComply));
 
-            Field versionField = Assistant.class.getDeclaredField("versionDate");
+            Field versionField = CompareComply.class.getDeclaredField("versionDate");
             versionField.setAccessible(true);
-            assertEquals(versionDate, versionField.get(assistant));
+            assertEquals(versionDate, versionField.get(compareComply));
         } catch (NoSuchFieldException | IllegalAccessException ex) {
             // This shouldn't happen
             assert false;

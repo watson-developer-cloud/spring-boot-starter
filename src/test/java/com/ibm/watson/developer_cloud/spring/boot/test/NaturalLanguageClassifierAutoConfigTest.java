@@ -14,8 +14,8 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier;
-import com.ibm.watson.developer_cloud.service.WatsonService;
+import com.ibm.watson.natural_language_classifier.v1.NaturalLanguageClassifier;
+import com.ibm.cloud.sdk.core.service.BaseService;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
 import okhttp3.Credentials;
 import org.junit.Test;
@@ -33,12 +33,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
 @TestPropertySource(properties = {
     "watson.natural-language-classifier.url=" + NaturalLanguageClassifierAutoConfigTest.url,
     "watson.natural-language-classifier.username=" + NaturalLanguageClassifierAutoConfigTest.username,
-    "watson.natural-language-classifier.password=" + NaturalLanguageClassifierAutoConfigTest.password
-})
+    "watson.natural-language-classifier.password=" + NaturalLanguageClassifierAutoConfigTest.password })
 public class NaturalLanguageClassifierAutoConfigTest {
 
   static final String url = "http://watson.com/natural-language-classifier";
@@ -50,15 +49,15 @@ public class NaturalLanguageClassifierAutoConfigTest {
 
   @Test
   public void naturalLanguageClassifierBeanConfig() {
-    NaturalLanguageClassifier naturalLanguageClassifier =
-            (NaturalLanguageClassifier) applicationContext.getBean("naturalLanguageClassifier");
+    NaturalLanguageClassifier naturalLanguageClassifier = (NaturalLanguageClassifier) applicationContext
+        .getBean("naturalLanguageClassifier");
 
     assertNotNull(naturalLanguageClassifier);
     assertEquals(url, naturalLanguageClassifier.getEndPoint());
 
-    // Verify the credentials  -- which are stored in a private member variable
+    // Verify the credentials -- which are stored in a private member variable
     try {
-      Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
+      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
       apiKeyField.setAccessible(true);
       assertEquals(Credentials.basic(username, password), apiKeyField.get(naturalLanguageClassifier));
     } catch (NoSuchFieldException | IllegalAccessException ex) {

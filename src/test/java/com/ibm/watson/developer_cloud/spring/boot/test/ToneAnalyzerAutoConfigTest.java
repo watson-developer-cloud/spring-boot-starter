@@ -14,10 +14,15 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.developer_cloud.tone_analyzer.v3.ToneAnalyzer;
-import com.ibm.watson.developer_cloud.service.WatsonService;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.lang.reflect.Field;
+
+import com.ibm.cloud.sdk.core.service.BaseService;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
-import okhttp3.Credentials;
+import com.ibm.watson.tone_analyzer.v3.ToneAnalyzer;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,19 +32,14 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import java.lang.reflect.Field;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import okhttp3.Credentials;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WatsonAutoConfiguration.class}, loader = AnnotationConfigContextLoader.class)
-@TestPropertySource(properties = {
-    "watson.tone-analyzer.url=" + ToneAnalyzerAutoConfigTest.url,
+@ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
+@TestPropertySource(properties = { "watson.tone-analyzer.url=" + ToneAnalyzerAutoConfigTest.url,
     "watson.tone-analyzer.username=" + ToneAnalyzerAutoConfigTest.username,
     "watson.tone-analyzer.password=" + ToneAnalyzerAutoConfigTest.password,
-    "watson.tone-analyzer.versionDate=" + ToneAnalyzerAutoConfigTest.versionDate
-})
+    "watson.tone-analyzer.versionDate=" + ToneAnalyzerAutoConfigTest.versionDate })
 public class ToneAnalyzerAutoConfigTest {
 
   static final String url = "http://watson.com/tone-analyzer";
@@ -57,9 +57,10 @@ public class ToneAnalyzerAutoConfigTest {
     assertNotNull(toneAnalyzer);
     assertEquals(url, toneAnalyzer.getEndPoint());
 
-    // Verify the credentials and versionDate -- which are stored in private member variables
+    // Verify the credentials and versionDate -- which are stored in private member
+    // variables
     try {
-      Field apiKeyField = WatsonService.class.getDeclaredField("apiKey");
+      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
       apiKeyField.setAccessible(true);
       assertEquals(Credentials.basic(username, password), apiKeyField.get(toneAnalyzer));
 
