@@ -19,14 +19,14 @@ public class WatsonConfigurationProperties {
   /** URL for Watson service. This URL should not include the username or password. **/
   private String url;
 
+  /** Watson Authorization type */
+  private String authType;
+  
   /** Watson service username. */
   private String username;
 
   /** Watson service password. */
   private String password;
-
-  /** Watson service API key. */
-  private String apiKey;
 
   /** Watson service IAM API key. */
   private String iamApiKey;
@@ -46,10 +46,6 @@ public class WatsonConfigurationProperties {
     this.password = password;
   }
 
-  public void setApiKey(String apiKey) {
-    this.apiKey = apiKey;
-  }
-
   public void setIamApiKey(String apiKey) {
     this.iamApiKey = apiKey;
   }
@@ -58,6 +54,10 @@ public class WatsonConfigurationProperties {
     this.versionDate = versionDate;
   }
 
+  public void setAuthType(String authType) {
+    this.authType = authType;
+  }
+  
   public String getUrl() {
     return this.url;
   }
@@ -70,15 +70,15 @@ public class WatsonConfigurationProperties {
     return this.password;
   }
 
-  public String getApiKey() {
-    return apiKey;
-  }
-
   public String getIamApiKey() {
     return iamApiKey;
   }
 
   public String getVersionDate() {
+    return this.versionDate;
+  }
+ 
+  public String getAuthType() {
     return this.versionDate;
   }
 }

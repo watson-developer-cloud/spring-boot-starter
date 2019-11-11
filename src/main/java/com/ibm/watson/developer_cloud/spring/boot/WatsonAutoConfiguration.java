@@ -14,8 +14,8 @@
 
 package com.ibm.watson.developer_cloud.spring.boot;
 
+import com.ibm.cloud.sdk.core.security.IamAuthenticator;
 import com.ibm.cloud.sdk.core.service.BaseService;
-import com.ibm.cloud.sdk.core.service.security.IamOptions;
 import com.ibm.watson.assistant.v1.Assistant;
 import com.ibm.watson.compare_comply.v1.CompareComply;
 import com.ibm.watson.discovery.v1.Discovery;
@@ -47,11 +47,23 @@ public class WatsonAutoConfiguration {
   private void configUrl(BaseService service, WatsonConfigurationProperties config) {
     String url = config.getUrl();
     if (url != null) {
-      service.setEndPoint(url);
+      service.setServiceUrl(url);
     }
   }
 
   private void configAuth(BaseService service, WatsonConfigurationProperties config) {
+    String authType = config.getAuthType();
+    
+    if ((authType == null || authType.isEmpty())) {
+      authType = IAM;
+    }
+    
+    if (authType.equals(IAM)) {
+      IamOptions options = new IamAuthenticator(apikey, url, clientId, clientSecret, disableSSLVerification, headers).Builder().apiKey(iamApiKey).build();
+      service.setIamCredentials(options);
+      return;
+    }
+    
     String iamApiKey = config.getIamApiKey();
     if (iamApiKey != null) {
       IamOptions options = new IamOptions.Builder().apiKey(iamApiKey).build();
