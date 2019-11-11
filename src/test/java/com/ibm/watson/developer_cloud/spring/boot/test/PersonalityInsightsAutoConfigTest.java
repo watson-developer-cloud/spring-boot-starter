@@ -14,15 +14,10 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.lang.reflect.Field;
-
-import com.ibm.cloud.sdk.core.service.BaseService;
+import com.ibm.cloud.sdk.core.security.Authenticator;
+import com.ibm.cloud.sdk.core.security.BasicAuthenticator;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
 import com.ibm.watson.personality_insights.v3.PersonalityInsights;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +27,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import okhttp3.Credentials;
+import java.lang.reflect.Field;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
@@ -55,14 +53,14 @@ public class PersonalityInsightsAutoConfigTest {
     PersonalityInsights personalityInsights = (PersonalityInsights) applicationContext.getBean("personalityInsights");
 
     assertNotNull(personalityInsights);
-    assertEquals(url, personalityInsights.getEndPoint());
+    assertEquals(url, personalityInsights.getServiceUrl());
 
-    // Verify the credentials and versionDate -- which are stored in private member
-    // variables
+    // Verify the credentials and versionDate -- the latter of which is stored in a private member variable
     try {
-      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
-      apiKeyField.setAccessible(true);
-      assertEquals(Credentials.basic(username, password), apiKeyField.get(personalityInsights));
+      assertEquals(Authenticator.AUTHTYPE_BASIC, personalityInsights.getAuthenticator().authenticationType());
+      BasicAuthenticator authenticator = (BasicAuthenticator) personalityInsights.getAuthenticator();
+      assertEquals(username, authenticator.getUsername());
+      assertEquals(password, authenticator.getPassword());
 
       Field versionField = PersonalityInsights.class.getDeclaredField("versionDate");
       versionField.setAccessible(true);

@@ -14,10 +14,10 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.natural_language_understanding.v1.NaturalLanguageUnderstanding;
-import com.ibm.cloud.sdk.core.service.BaseService;
+import com.ibm.cloud.sdk.core.security.Authenticator;
+import com.ibm.cloud.sdk.core.security.BasicAuthenticator;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
-import okhttp3.Credentials;
+import com.ibm.watson.natural_language_understanding.v1.NaturalLanguageUnderstanding;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,14 +55,14 @@ public class NaturalLanguageUnderstandingAutoConfigTest {
         .getBean("naturalLanguageUnderstanding");
 
     assertNotNull(naturalLanguageUnderstanding);
-    assertEquals(url, naturalLanguageUnderstanding.getEndPoint());
+    assertEquals(url, naturalLanguageUnderstanding.getServiceUrl());
 
-    // Verify the credentials and versionDate -- which are stored in private member
-    // variables
+    // Verify the credentials and versionDate -- the latter of which is stored in a private member variable
     try {
-      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
-      apiKeyField.setAccessible(true);
-      assertEquals(Credentials.basic(username, password), apiKeyField.get(naturalLanguageUnderstanding));
+      assertEquals(Authenticator.AUTHTYPE_BASIC, naturalLanguageUnderstanding.getAuthenticator().authenticationType());
+      BasicAuthenticator authenticator = (BasicAuthenticator) naturalLanguageUnderstanding.getAuthenticator();
+      assertEquals(username, authenticator.getUsername());
+      assertEquals(password, authenticator.getPassword());
 
       Field versionField = NaturalLanguageUnderstanding.class.getDeclaredField("versionDate");
       versionField.setAccessible(true);

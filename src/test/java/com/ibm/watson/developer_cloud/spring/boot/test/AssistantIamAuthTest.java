@@ -14,9 +14,9 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.cloud.sdk.core.service.BaseService;
+import com.ibm.cloud.sdk.core.security.Authenticator;
+import com.ibm.cloud.sdk.core.security.IamAuthenticator;
 import com.ibm.watson.assistant.v1.Assistant;
-import com.ibm.cloud.sdk.core.service.security.IamTokenManager;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,40 +35,36 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
 @TestPropertySource(properties = { "watson.assistant.url=" + AssistantIamAuthTest.url,
-        "watson.assistant.iamApiKey=" + AssistantIamAuthTest.iamApiKey,
-        "watson.assistant.versionDate=" + AssistantIamAuthTest.versionDate })
+    "watson.assistant.iamApiKey=" + AssistantIamAuthTest.iamApiKey,
+    "watson.assistant.versionDate=" + AssistantIamAuthTest.versionDate })
 public class AssistantIamAuthTest {
 
-    static final String url = "http://watson.com/assistant";
-    static final String iamApiKey = "super-secret-apikey";
-    static final String versionDate = "2017-12-15";
+  static final String url = "http://watson.com/assistant";
+  static final String iamApiKey = "super-secret-apikey";
+  static final String versionDate = "2017-12-15";
 
-    @Autowired
-    private ApplicationContext applicationContext;
+  @Autowired
+  private ApplicationContext applicationContext;
 
-    @Test
-    public void assistantBeanConfig() {
-        Assistant assistant = (Assistant) applicationContext.getBean("assistant");
+  @Test
+  public void assistantBeanConfig() {
+    Assistant assistant = (Assistant) applicationContext.getBean("assistant");
 
-        assertNotNull(assistant);
-        assertEquals(url, assistant.getEndPoint());
+    assertNotNull(assistant);
+    assertEquals(url, assistant.getServiceUrl());
 
-        // Verify the credentials and versionDate -- which are stored in private member
-        // variables
-        try {
-            Field iamTokenManagerField = BaseService.class.getDeclaredField("tokenManager");
-            iamTokenManagerField.setAccessible(true);
-            IamTokenManager tokenManager = (IamTokenManager) iamTokenManagerField.get(assistant);
-            Field iamApiKeyField = IamTokenManager.class.getDeclaredField("apiKey");
-            iamApiKeyField.setAccessible(true);
-            assertEquals(iamApiKey, iamApiKeyField.get(tokenManager));
+    // Verify the credentials and versionDate -- the latter of which is stored in a private member variable
+    try {
+      assertEquals(Authenticator.AUTHTYPE_IAM, assistant.getAuthenticator().authenticationType());
+      IamAuthenticator authenticator = (IamAuthenticator) assistant.getAuthenticator();
+      assertEquals(iamApiKey, authenticator.getApiKey());
 
-            Field versionField = Assistant.class.getDeclaredField("versionDate");
-            versionField.setAccessible(true);
-            assertEquals(versionDate, versionField.get(assistant));
-        } catch (NoSuchFieldException | IllegalAccessException ex) {
-            // This shouldn't happen
-            assert false;
-        }
+      Field versionField = Assistant.class.getDeclaredField("versionDate");
+      versionField.setAccessible(true);
+      assertEquals(versionDate, versionField.get(assistant));
+    } catch (NoSuchFieldException | IllegalAccessException ex) {
+      // This shouldn't happen
+      assert false;
     }
+  }
 }

@@ -14,10 +14,10 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.discovery.v1.Discovery;
-import com.ibm.cloud.sdk.core.service.BaseService;
+import com.ibm.cloud.sdk.core.security.Authenticator;
+import com.ibm.cloud.sdk.core.security.BasicAuthenticator;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
-import okhttp3.Credentials;
+import com.ibm.watson.discovery.v1.Discovery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,14 +53,14 @@ public class DiscoveryAutoConfigTest {
     Discovery discovery = (Discovery) applicationContext.getBean("discovery");
 
     assertNotNull(discovery);
-    assertEquals(url, discovery.getEndPoint());
+    assertEquals(url, discovery.getServiceUrl());
 
-    // Verify the credentials and versionDate -- which are stored in private member
-    // variables
+    // Verify the credentials and versionDate -- the latter of which is stored in a private member variable
     try {
-      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
-      apiKeyField.setAccessible(true);
-      assertEquals(Credentials.basic(username, password), apiKeyField.get(discovery));
+      assertEquals(Authenticator.AUTHTYPE_BASIC, discovery.getAuthenticator().authenticationType());
+      BasicAuthenticator authenticator = (BasicAuthenticator) discovery.getAuthenticator();
+      assertEquals(username, authenticator.getUsername());
+      assertEquals(password, authenticator.getPassword());
 
       Field versionField = Discovery.class.getDeclaredField("versionDate");
       versionField.setAccessible(true);

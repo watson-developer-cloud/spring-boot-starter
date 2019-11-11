@@ -14,8 +14,11 @@
 
 package com.ibm.watson.developer_cloud.spring.boot;
 
+import com.ibm.cloud.sdk.core.security.Authenticator;
+import com.ibm.cloud.sdk.core.security.BasicAuthenticator;
+import com.ibm.cloud.sdk.core.security.ConfigBasedAuthenticatorFactory;
+import com.ibm.cloud.sdk.core.security.IamAuthenticator;
 import com.ibm.cloud.sdk.core.service.BaseService;
-import com.ibm.cloud.sdk.core.service.security.IamOptions;
 import com.ibm.watson.assistant.v1.Assistant;
 import com.ibm.watson.compare_comply.v1.CompareComply;
 import com.ibm.watson.discovery.v1.Discovery;
@@ -27,7 +30,6 @@ import com.ibm.watson.speech_to_text.v1.SpeechToText;
 import com.ibm.watson.text_to_speech.v1.TextToSpeech;
 import com.ibm.watson.tone_analyzer.v3.ToneAnalyzer;
 import com.ibm.watson.visual_recognition.v3.VisualRecognition;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -47,28 +49,28 @@ public class WatsonAutoConfiguration {
   private void configUrl(BaseService service, WatsonConfigurationProperties config) {
     String url = config.getUrl();
     if (url != null) {
-      service.setEndPoint(url);
+      service.setServiceUrl(url);
     }
   }
 
-  private void configAuth(BaseService service, WatsonConfigurationProperties config) {
+  private Authenticator configAuth(WatsonConfigurationProperties config, String serviceName) {
     String iamApiKey = config.getIamApiKey();
     if (iamApiKey != null) {
-      IamOptions options = new IamOptions.Builder().apiKey(iamApiKey).build();
-      service.setIamCredentials(options);
-      return;
+      return new IamAuthenticator(iamApiKey);
     }
     String username = config.getUsername();
     String password = config.getPassword();
     if (username != null && password != null) {
-      service.setUsernameAndPassword(username, password);
-      return;
+      return new BasicAuthenticator(username, password);
     }
     String apiKey = config.getApiKey();
     if (apiKey != null) {
-      service.setApiKey(apiKey);
-      return;
+      return new WatsonApiKeyAuthenticator(apiKey);
     }
+
+    // If we can't find the right properties, we'll return what we get from the auth config factory, which will
+    // pull from things like VCAP_SERVICES.
+    return ConfigBasedAuthenticatorFactory.getAuthenticator(serviceName);
   }
 
   // Watson Assistant service
@@ -80,9 +82,9 @@ public class WatsonAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonAssistantConfigurationProperties.PREFIX)
   public Assistant assistant() {
-    Assistant service = new Assistant(assistantConfig.getVersionDate());
+    Authenticator authConfig = configAuth(assistantConfig, "assistant");
+    Assistant service = new Assistant(assistantConfig.getVersionDate(), authConfig);
     configUrl(service, assistantConfig);
-    configAuth(service, assistantConfig);
     return service;
   }
 
@@ -95,9 +97,9 @@ public class WatsonAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonCompareComplyConfigurationProperties.PREFIX)
   public CompareComply compareComply() {
-    CompareComply service = new CompareComply(compareComplyConfig.getVersionDate());
+    Authenticator authConfig = configAuth(compareComplyConfig, "compare_comply");
+    CompareComply service = new CompareComply(compareComplyConfig.getVersionDate(), authConfig);
     configUrl(service, compareComplyConfig);
-    configAuth(service, compareComplyConfig);
     return service;
   }
 
@@ -110,9 +112,9 @@ public class WatsonAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonDiscoveryConfigurationProperties.PREFIX)
   public Discovery discovery() {
-    Discovery service = new Discovery(discoveryConfig.getVersionDate());
+    Authenticator authConfig = configAuth(discoveryConfig, "discovery");
+    Discovery service = new Discovery(discoveryConfig.getVersionDate(), authConfig);
     configUrl(service, discoveryConfig);
-    configAuth(service, discoveryConfig);
     return service;
   }
 
@@ -125,9 +127,9 @@ public class WatsonAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonLanguageTranslatorConfigurationProperties.PREFIX)
   public LanguageTranslator languageTranslator() {
-    LanguageTranslator service = new LanguageTranslator(ltConfig.getVersionDate());
+    Authenticator authConfig = configAuth(ltConfig, "language_translator");
+    LanguageTranslator service = new LanguageTranslator(ltConfig.getVersionDate(), authConfig);
     configUrl(service, ltConfig);
-    configAuth(service, ltConfig);
     return service;
   }
 
@@ -140,9 +142,9 @@ public class WatsonAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonNaturalLanguageClassifierConfigurationProperties.PREFIX)
   public NaturalLanguageClassifier naturalLanguageClassifier() {
-    NaturalLanguageClassifier service = new NaturalLanguageClassifier();
+    Authenticator authConfig = configAuth(nlcConfig, "natural_language_classifier");
+    NaturalLanguageClassifier service = new NaturalLanguageClassifier(authConfig);
     configUrl(service, nlcConfig);
-    configAuth(service, nlcConfig);
     return service;
   }
 
@@ -155,9 +157,9 @@ public class WatsonAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonNaturalLanguageUnderstandingConfigurationProperties.PREFIX)
   public NaturalLanguageUnderstanding naturalLanguageUnderstanding() {
-    NaturalLanguageUnderstanding service = new NaturalLanguageUnderstanding(nluConfig.getVersionDate());
+    Authenticator authConfig = configAuth(nluConfig, "natural_language_understanding");
+    NaturalLanguageUnderstanding service = new NaturalLanguageUnderstanding(nluConfig.getVersionDate(), authConfig);
     configUrl(service, nluConfig);
-    configAuth(service, nluConfig);
     return service;
   }
 
@@ -170,9 +172,9 @@ public class WatsonAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonPersonalityInsightsConfigurationProperties.PREFIX)
   public PersonalityInsights personalityInsights() {
-    PersonalityInsights service = new PersonalityInsights(piConfig.getVersionDate());
+    Authenticator authConfig = configAuth(piConfig, "personality_insights");
+    PersonalityInsights service = new PersonalityInsights(piConfig.getVersionDate(), authConfig);
     configUrl(service, piConfig);
-    configAuth(service, piConfig);
     return service;
   }
 
@@ -185,9 +187,9 @@ public class WatsonAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonSpeechToTextConfigurationProperties.PREFIX)
   public SpeechToText speechToText() {
-    SpeechToText service = new SpeechToText();
+    Authenticator authConfig = configAuth(sttConfig, "speech_to_text");
+    SpeechToText service = new SpeechToText(authConfig);
     configUrl(service, sttConfig);
-    configAuth(service, sttConfig);
     return service;
   }
 
@@ -200,9 +202,9 @@ public class WatsonAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonTextToSpeechConfigurationProperties.PREFIX)
   public TextToSpeech textToSpeech() {
-    TextToSpeech service = new TextToSpeech();
+    Authenticator authConfig = configAuth(ttsConfig, "text_to_speech");
+    TextToSpeech service = new TextToSpeech(authConfig);
     configUrl(service, ttsConfig);
-    configAuth(service, ttsConfig);
     return service;
   }
 
@@ -215,9 +217,9 @@ public class WatsonAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonToneAnalyzerConfigurationProperties.PREFIX)
   public ToneAnalyzer toneAnalyzer() {
-    ToneAnalyzer service = new ToneAnalyzer(taConfig.getVersionDate());
+    Authenticator authConfig = configAuth(taConfig, "tone_analyzer");
+    ToneAnalyzer service = new ToneAnalyzer(taConfig.getVersionDate(), authConfig);
     configUrl(service, taConfig);
-    configAuth(service, taConfig);
     return service;
   }
 
@@ -230,9 +232,9 @@ public class WatsonAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonVisualRecognitionConfigurationProperties.PREFIX)
   public VisualRecognition visualRecognition() {
-    VisualRecognition service = new VisualRecognition(vrConfig.getVersionDate());
+    Authenticator authConfig = configAuth(vrConfig, "visual_recognition");
+    VisualRecognition service = new VisualRecognition(vrConfig.getVersionDate(), authConfig);
     configUrl(service, vrConfig);
-    configAuth(service, vrConfig);
     return service;
   }
 

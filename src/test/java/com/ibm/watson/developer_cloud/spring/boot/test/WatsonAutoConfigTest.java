@@ -14,15 +14,10 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.lang.reflect.Field;
-
-import com.ibm.cloud.sdk.core.service.BaseService;
+import com.ibm.cloud.sdk.core.security.Authenticator;
+import com.ibm.cloud.sdk.core.security.BasicAuthenticator;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
 import com.ibm.watson.speech_to_text.v1.SpeechToText;
-
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
@@ -34,45 +29,41 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import okhttp3.Credentials;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
 @TestPropertySource(properties = { "watson.speech-to-text.enabled=true" })
 public class WatsonAutoConfigTest {
 
-    private static final String url = "http://watson.com/speech-to-text";
-    private static final String username = "sam";
-    private static final String password = "secret";
+  private static final String url = "http://watson.com/speech-to-text";
+  private static final String username = "sam";
+  private static final String password = "secret";
 
-    @ClassRule
-    public static final EnvironmentVariables environmentVariables = new EnvironmentVariables();
+  @ClassRule
+  public static final EnvironmentVariables environmentVariables = new EnvironmentVariables();
 
-    static {
-        String vcapServices = "{\"speech_to_text\":[{" + "\"credentials\": {" + "\"url\":\"" + url + "\","
-                + "\"username\":\"" + username + "\"," + "\"password\":\"" + password + "\"" + "},"
-                + "\"plan\": \"free\"" + "}]}";
-        environmentVariables.set("VCAP_SERVICES", vcapServices);
-    }
+  static {
+    String vcapServices = "{\"speech_to_text\":[{" + "\"credentials\": {" + "\"url\":\"" + url + "\","
+            + "\"username\":\"" + username + "\"," + "\"password\":\"" + password + "\"" + "},"
+            + "\"plan\": \"free\"" + "}]}";
+    environmentVariables.set("VCAP_SERVICES", vcapServices);
+  }
 
-    @Autowired
-    private ApplicationContext applicationContext;
+  @Autowired
+  private ApplicationContext applicationContext;
 
-    @Test
-    public void watsonBeanConfigFromEnvironment() {
-        SpeechToText speechToText = (SpeechToText) applicationContext.getBean("speechToText");
+  @Test
+  public void watsonBeanConfigFromEnvironment() {
+    SpeechToText speechToText = (SpeechToText) applicationContext.getBean("speechToText");
 
-        assertNotNull(speechToText);
-        assertEquals(url, speechToText.getEndPoint());
+    assertNotNull(speechToText);
+    assertEquals(url, speechToText.getServiceUrl());
 
-        // Verify the credentials -- which are stored in a private member variable
-        try {
-            Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
-            apiKeyField.setAccessible(true);
-            assertEquals(Credentials.basic(username, password), apiKeyField.get(speechToText));
-        } catch (NoSuchFieldException | IllegalAccessException ex) {
-            // This shouldn't happen
-            assert false;
-        }
-    }
+    assertEquals(Authenticator.AUTHTYPE_BASIC, speechToText.getAuthenticator().authenticationType());
+    BasicAuthenticator authenticator = (BasicAuthenticator) speechToText.getAuthenticator();
+    assertEquals(username, authenticator.getUsername());
+    assertEquals(password, authenticator.getPassword());
+  }
 }
