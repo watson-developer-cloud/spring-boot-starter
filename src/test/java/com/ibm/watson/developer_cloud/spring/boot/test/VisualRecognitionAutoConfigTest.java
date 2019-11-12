@@ -14,15 +14,9 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.lang.reflect.Field;
-
-import com.ibm.cloud.sdk.core.service.BaseService;
+import com.ibm.watson.developer_cloud.spring.boot.WatsonApiKeyAuthenticator;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
 import com.ibm.watson.visual_recognition.v3.VisualRecognition;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +25,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
+import java.lang.reflect.Field;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
@@ -51,14 +50,13 @@ public class VisualRecognitionAutoConfigTest {
     VisualRecognition visualRecognition = (VisualRecognition) applicationContext.getBean("visualRecognition");
 
     assertNotNull(visualRecognition);
-    assertEquals(url, visualRecognition.getEndPoint());
+    assertEquals(url, visualRecognition.getServiceUrl());
 
-    // Verify the credentials and versionDate -- which are stored in private member
-    // variables
+    // Verify the credentials and versionDate -- the latter of which is stored in a private member variable
     try {
-      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
-      apiKeyField.setAccessible(true);
-      assertEquals(apiKey, apiKeyField.get(visualRecognition));
+      assertEquals("apiKey", visualRecognition.getAuthenticator().authenticationType());
+      WatsonApiKeyAuthenticator authenticator = (WatsonApiKeyAuthenticator) visualRecognition.getAuthenticator();
+      assertEquals(apiKey, authenticator.getApiKey());
 
       Field versionField = VisualRecognition.class.getDeclaredField("versionDate");
       versionField.setAccessible(true);

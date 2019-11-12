@@ -14,15 +14,10 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.lang.reflect.Field;
-
-import com.ibm.cloud.sdk.core.service.BaseService;
+import com.ibm.cloud.sdk.core.security.Authenticator;
+import com.ibm.cloud.sdk.core.security.BasicAuthenticator;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
 import com.ibm.watson.text_to_speech.v1.TextToSpeech;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +27,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import okhttp3.Credentials;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
@@ -53,16 +49,12 @@ public class TextToSpeechAutoConfigTest {
     TextToSpeech textToSpeech = (TextToSpeech) applicationContext.getBean("textToSpeech");
 
     assertNotNull(textToSpeech);
-    assertEquals(url, textToSpeech.getEndPoint());
+    assertEquals(url, textToSpeech.getServiceUrl());
 
-    // Verify the credentials -- which are stored in private member variable
-    try {
-      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
-      apiKeyField.setAccessible(true);
-      assertEquals(Credentials.basic(username, password), apiKeyField.get(textToSpeech));
-    } catch (NoSuchFieldException | IllegalAccessException ex) {
-      // This shouldn't happen
-      assert false;
-    }
+    // Verify the credentials
+    assertEquals(Authenticator.AUTHTYPE_BASIC, textToSpeech.getAuthenticator().authenticationType());
+    BasicAuthenticator authenticator = (BasicAuthenticator) textToSpeech.getAuthenticator();
+    assertEquals(username, authenticator.getUsername());
+    assertEquals(password, authenticator.getPassword());
   }
 }

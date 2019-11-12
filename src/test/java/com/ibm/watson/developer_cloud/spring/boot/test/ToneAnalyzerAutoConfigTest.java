@@ -14,15 +14,10 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.lang.reflect.Field;
-
-import com.ibm.cloud.sdk.core.service.BaseService;
+import com.ibm.cloud.sdk.core.security.Authenticator;
+import com.ibm.cloud.sdk.core.security.BasicAuthenticator;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
 import com.ibm.watson.tone_analyzer.v3.ToneAnalyzer;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +27,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import okhttp3.Credentials;
+import java.lang.reflect.Field;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { WatsonAutoConfiguration.class }, loader = AnnotationConfigContextLoader.class)
@@ -55,14 +53,14 @@ public class ToneAnalyzerAutoConfigTest {
     ToneAnalyzer toneAnalyzer = (ToneAnalyzer) applicationContext.getBean("toneAnalyzer");
 
     assertNotNull(toneAnalyzer);
-    assertEquals(url, toneAnalyzer.getEndPoint());
+    assertEquals(url, toneAnalyzer.getServiceUrl());
 
-    // Verify the credentials and versionDate -- which are stored in private member
-    // variables
+    // Verify the credentials and versionDate -- the latter of which is stored in a private member variable
     try {
-      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
-      apiKeyField.setAccessible(true);
-      assertEquals(Credentials.basic(username, password), apiKeyField.get(toneAnalyzer));
+      assertEquals(Authenticator.AUTHTYPE_BASIC, toneAnalyzer.getAuthenticator().authenticationType());
+      BasicAuthenticator authenticator = (BasicAuthenticator) toneAnalyzer.getAuthenticator();
+      assertEquals(username, authenticator.getUsername());
+      assertEquals(password, authenticator.getPassword());
 
       Field versionField = ToneAnalyzer.class.getDeclaredField("versionDate");
       versionField.setAccessible(true);

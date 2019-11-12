@@ -14,10 +14,10 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.watson.natural_language_classifier.v1.NaturalLanguageClassifier;
-import com.ibm.cloud.sdk.core.service.BaseService;
+import com.ibm.cloud.sdk.core.security.Authenticator;
+import com.ibm.cloud.sdk.core.security.BasicAuthenticator;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
-import okhttp3.Credentials;
+import com.ibm.watson.natural_language_classifier.v1.NaturalLanguageClassifier;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +26,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-import java.lang.reflect.Field;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -53,16 +51,12 @@ public class NaturalLanguageClassifierAutoConfigTest {
         .getBean("naturalLanguageClassifier");
 
     assertNotNull(naturalLanguageClassifier);
-    assertEquals(url, naturalLanguageClassifier.getEndPoint());
+    assertEquals(url, naturalLanguageClassifier.getServiceUrl());
 
-    // Verify the credentials -- which are stored in a private member variable
-    try {
-      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
-      apiKeyField.setAccessible(true);
-      assertEquals(Credentials.basic(username, password), apiKeyField.get(naturalLanguageClassifier));
-    } catch (NoSuchFieldException | IllegalAccessException ex) {
-      // This shouldn't happen
-      assert false;
-    }
+    // Verify the credentials
+    assertEquals(Authenticator.AUTHTYPE_BASIC, naturalLanguageClassifier.getAuthenticator().authenticationType());
+    BasicAuthenticator authenticator = (BasicAuthenticator) naturalLanguageClassifier.getAuthenticator();
+    assertEquals(username, authenticator.getUsername());
+    assertEquals(password, authenticator.getPassword());
   }
 }

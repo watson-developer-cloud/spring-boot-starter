@@ -14,10 +14,10 @@
 
 package com.ibm.watson.developer_cloud.spring.boot.test;
 
-import com.ibm.cloud.sdk.core.service.BaseService;
+import com.ibm.cloud.sdk.core.security.Authenticator;
+import com.ibm.cloud.sdk.core.security.BasicAuthenticator;
 import com.ibm.watson.assistant.v1.Assistant;
 import com.ibm.watson.developer_cloud.spring.boot.WatsonAutoConfiguration;
-import okhttp3.Credentials;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,14 +53,14 @@ public class AssistantAutoConfigTest {
     Assistant assistant = (Assistant) applicationContext.getBean("assistant");
 
     assertNotNull(assistant);
-    assertEquals(url, assistant.getEndPoint());
+    assertEquals(url, assistant.getServiceUrl());
 
-    // Verify the credentials and versionDate -- which are stored in private member
-    // variables
+    // Verify the credentials and versionDate -- the latter of which is stored in a private member variable
     try {
-      Field apiKeyField = BaseService.class.getDeclaredField("apiKey");
-      apiKeyField.setAccessible(true);
-      assertEquals(Credentials.basic(username, password), apiKeyField.get(assistant));
+      assertEquals(Authenticator.AUTHTYPE_BASIC, assistant.getAuthenticator().authenticationType());
+      BasicAuthenticator authenticator = (BasicAuthenticator) assistant.getAuthenticator();
+      assertEquals(username, authenticator.getUsername());
+      assertEquals(password, authenticator.getPassword());
 
       Field versionField = Assistant.class.getDeclaredField("versionDate");
       versionField.setAccessible(true);
