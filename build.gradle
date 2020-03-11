@@ -14,7 +14,7 @@
 
 buildscript {
     repositories {
-        maven { url 'http://repo.spring.io/plugins-release' }
+        maven { url 'https://repo.spring.io/plugins-release' }
     }
     dependencies {
         classpath 'io.spring.gradle:propdeps-plugin:0.0.9.RELEASE'
@@ -22,8 +22,8 @@ buildscript {
 }
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '1.2.4'
-    id 'io.codearte.nexus-staging' version '0.11.0'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'io.codearte.nexus-staging' version '0.21.2'
 }
 
 apply plugin: 'java'
@@ -82,7 +82,7 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    maven { url 'http://repo.spring.io/libs-release' }
+    maven { url 'https://repo.spring.io/libs-release' }
     maven { url 'https://dl.bintray.com/ibm-cloud-sdks/ibm-cloud-sdk-repo' }
 
 }
@@ -108,7 +108,7 @@ dependencies {
 
     // testing
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile 'com.github.stefanbirkner:system-rules:1.16.0'
+    testCompile 'com.github.stefanbirkner:system-rules:1.19.0'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
 }
 
@@ -124,13 +124,13 @@ test {
 apply plugin: 'jacoco'
 
 task codeCoverageReport(type: JacocoReport, dependsOn: test) {
-    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-    sourceDirectories = files(sourceSets.main.allSource.srcDirs)
-    classDirectories = files(sourceSets.main.output)
+    getExecutionData().setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+    getSourceDirectories().setFrom(files(sourceSets.main.allSource.srcDirs))
+    getClassDirectories().setFrom(files(sourceSets.main.output))
 
     reports {
         xml.enabled true
-        xml.destination "${buildDir}/reports/jacoco/report.xml"
+        xml.destination file("${buildDir}/reports/jacoco/report.xml")
         csv.enabled false
         html.destination file("${buildDir}/reports/jacoco-html")
     }
