@@ -37,7 +37,7 @@ import static org.junit.Assert.assertNotNull;
 @TestPropertySource(properties = { "watson.speech-to-text.enabled=true" })
 public class WatsonAutoConfigTest {
 
-  private static final String url = "http://watson.com/speech-to-text";
+  private static final String url = "https://api.us-south.speech-to-text.watson.cloud.ibm.com";
   private static final String username = "sam";
   private static final String password = "secret";
 
@@ -61,9 +61,6 @@ public class WatsonAutoConfigTest {
     assertNotNull(speechToText);
     assertEquals(url, speechToText.getServiceUrl());
 
-    assertEquals(Authenticator.AUTHTYPE_BASIC, speechToText.getAuthenticator().authenticationType());
-    BasicAuthenticator authenticator = (BasicAuthenticator) speechToText.getAuthenticator();
-    assertEquals(username, authenticator.getUsername());
-    assertEquals(password, authenticator.getPassword());
+    assertEquals(Authenticator.AUTHTYPE_IAM, speechToText.getAuthenticator().authenticationType());
   }
 }
