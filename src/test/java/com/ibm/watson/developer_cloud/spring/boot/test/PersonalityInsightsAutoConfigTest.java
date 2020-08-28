@@ -40,7 +40,7 @@ import static org.junit.Assert.assertNotNull;
     "watson.personality-insights.versionDate=" + PersonalityInsightsAutoConfigTest.versionDate })
 public class PersonalityInsightsAutoConfigTest {
 
-  static final String url = "http://watson.com/personality-insights";
+  static final String url = "https://api.us-south.personality-insights.watson.cloud.ibm.com";
   static final String username = "sam";
   static final String password = "secret";
   static final String versionDate = "2017-12-15";

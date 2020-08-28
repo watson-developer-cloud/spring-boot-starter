@@ -38,7 +38,7 @@ import static org.junit.Assert.assertNotNull;
     "watson.natural-language-classifier.password=" + NaturalLanguageClassifierAutoConfigTest.password })
 public class NaturalLanguageClassifierAutoConfigTest {
 
-  static final String url = "http://watson.com/natural-language-classifier";
+  static final String url = "https://api.us-south.natural-language-classifier.watson.cloud.ibm.com";
   static final String username = "sam";
   static final String password = "secret";
 

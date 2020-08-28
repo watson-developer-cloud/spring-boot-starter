@@ -38,7 +38,7 @@ import static org.junit.Assert.assertNotNull;
     "watson.language-translator.versionDate=" + LanguageTranslatorAutoConfigTest.versionDate })
 public class LanguageTranslatorAutoConfigTest {
 
-  static final String url = "http://watson.com/language-translator";
+  static final String url = "https://api.us-south.language-translator.watson.cloud.ibm.com";
   static final String username = "sam";
   static final String password = "secret";
   static final String versionDate = "2018-06-12";

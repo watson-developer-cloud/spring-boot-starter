@@ -39,7 +39,7 @@ import static org.junit.Assert.assertNotNull;
     "watson.assistant.versionDate=" + AssistantIamAuthTest.versionDate })
 public class AssistantIamAuthTest {
 
-  static final String url = "http://watson.com/assistant";
+  static final String url = "https://api.us-south.assistant.watson.cloud.ibm.com";
   static final String iamApiKey = "super-secret-apikey";
   static final String versionDate = "2017-12-15";
 

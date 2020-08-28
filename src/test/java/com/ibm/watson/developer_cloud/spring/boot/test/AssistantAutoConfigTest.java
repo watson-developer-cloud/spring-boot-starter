@@ -40,7 +40,7 @@ import static org.junit.Assert.assertNotNull;
     "watson.assistant.versionDate=" + AssistantAutoConfigTest.versionDate })
 public class AssistantAutoConfigTest {
 
-  static final String url = "http://watson.com/assistant";
+  static final String url = "https://api.us-south.assistant.watson.cloud.ibm.com";
   static final String username = "sam";
   static final String password = "secret";
   static final String versionDate = "2017-12-15";

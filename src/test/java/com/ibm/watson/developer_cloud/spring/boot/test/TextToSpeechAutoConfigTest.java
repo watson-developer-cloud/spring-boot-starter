@@ -37,7 +37,7 @@ import static org.junit.Assert.assertNotNull;
     "watson.text-to-speech.password=" + TextToSpeechAutoConfigTest.password })
 public class TextToSpeechAutoConfigTest {
 
-  static final String url = "http://watson.com/text-to-speech";
+  static final String url = "https://api.us-south.text-to-speech.watson.cloud.ibm.com";
   static final String username = "sam";
   static final String password = "secret";
 

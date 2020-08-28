@@ -40,7 +40,7 @@ import static org.junit.Assert.assertNotNull;
     "watson.compare-comply.versionDate=" + CompareComplyAutoConfigTest.versionDate })
 public class CompareComplyAutoConfigTest {
 
-  static final String url = "http://watson.com/compare-comply";
+  static final String url = "https://api.us-south.compare-comply.watson.cloud.ibm.com";
   static final String username = "sam";
   static final String password = "secret";
   static final String versionDate = "2017-12-15";
