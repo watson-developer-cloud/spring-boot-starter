@@ -41,7 +41,7 @@ import static org.junit.Assert.assertNotNull;
     "watson.natural-language-understanding.versionDate=" + NaturalLanguageUnderstandingAutoConfigTest.versionDate })
 public class NaturalLanguageUnderstandingAutoConfigTest {
 
-  static final String url = "http://watson.com/natural-language-understanding";
+  static final String url = "https://api.us-south.natural-language-understanding.watson.cloud.ibm.com";
   static final String username = "sam";
   static final String password = "secret";
   static final String versionDate = "2017-12-15";

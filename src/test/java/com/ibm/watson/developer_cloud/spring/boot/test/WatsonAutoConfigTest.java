@@ -37,7 +37,7 @@ import static org.junit.Assert.assertNotNull;
 @TestPropertySource(properties = { "watson.speech-to-text.enabled=true" })
 public class WatsonAutoConfigTest {
 
-  private static final String url = "http://watson.com/speech-to-text";
+  private static final String url = "https://api.us-south.speech-to-text.watson.cloud.ibm.com";
   private static final String username = "sam";
   private static final String password = "secret";
 

@@ -38,7 +38,7 @@ import static org.junit.Assert.assertNotNull;
     "watson.visual-recognition.versionDate=" + VisualRecognitionAutoConfigTest.versionDate })
 public class VisualRecognitionAutoConfigTest {
 
-  static final String url = "http://watson.com/visual-recognition";
+  static final String url = "https://api.us-south.visual-recognition.watson.cloud.ibm.com";
   static final String apiKey = "secret";
   static final String versionDate = "2017-12-15";
 

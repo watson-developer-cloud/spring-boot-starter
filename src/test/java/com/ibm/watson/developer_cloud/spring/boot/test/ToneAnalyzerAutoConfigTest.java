@@ -40,7 +40,7 @@ import static org.junit.Assert.assertNotNull;
     "watson.tone-analyzer.versionDate=" + ToneAnalyzerAutoConfigTest.versionDate })
 public class ToneAnalyzerAutoConfigTest {
 
-  static final String url = "http://watson.com/tone-analyzer";
+  static final String url = "https://api.us-south.tone-analyzer.watson.cloud.ibm.com";
   static final String username = "sam";
   static final String password = "secret";
   static final String versionDate = "2017-12-15";
