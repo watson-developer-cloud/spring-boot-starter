@@ -75,7 +75,7 @@ public class WatsonAutoConfiguration {
     return ConfigBasedAuthenticatorFactory.getAuthenticator(serviceName);
   }
 
-  // Watson Assistant service
+  // Watson Assistant service V1
 
   @Autowired
   private WatsonAssistantConfigurationProperties assistantConfig;
