@@ -100,7 +100,8 @@ public class WatsonAutoConfiguration {
   @ConditionalOnWatsonServiceProperties(prefix = WatsonAssistantV2ConfigurationProperties.PREFIX)
   public com.ibm.watson.assistant.v2.Assistant assistantV2() {
     Authenticator authConfig = configAuth(assistantV2Config, "assistant_v2");
-    com.ibm.watson.assistant.v2.Assistant service = new com.ibm.watson.assistant.v2.Assistant(assistantV2Config.getVersionDate(), authConfig);
+    com.ibm.watson.assistant.v2.Assistant service =
+            new com.ibm.watson.assistant.v2.Assistant(assistantV2Config.getVersionDate(), authConfig);
     configUrl(service, assistantConfig);
     return service;
   }
@@ -145,7 +146,8 @@ public class WatsonAutoConfiguration {
   @ConditionalOnWatsonServiceProperties(prefix = WatsonDiscoveryV2ConfigurationProperties.PREFIX)
   public com.ibm.watson.discovery.v2.Discovery discoveryV2() {
     Authenticator authConfig = configAuth(discoveryV2Config, "discovery_v2");
-    com.ibm.watson.discovery.v2.Discovery service = new com.ibm.watson.discovery.v2.Discovery(discoveryV2Config.getVersionDate(), authConfig);
+    com.ibm.watson.discovery.v2.Discovery service =
+            new com.ibm.watson.discovery.v2.Discovery(discoveryV2Config.getVersionDate(), authConfig);
     configUrl(service, discoveryV2Config);
     return service;
   }
