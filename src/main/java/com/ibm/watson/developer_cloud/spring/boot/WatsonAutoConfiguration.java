@@ -38,7 +38,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties({ WatsonAssistantConfigurationProperties.class,
+    WatsonAssistantV2ConfigurationProperties.class,
     WatsonCompareComplyConfigurationProperties.class, WatsonDiscoveryConfigurationProperties.class,
+    WatsonDiscoveryV2ConfigurationProperties.class,
     WatsonLanguageTranslatorConfigurationProperties.class, WatsonNaturalLanguageClassifierConfigurationProperties.class,
     WatsonNaturalLanguageUnderstandingConfigurationProperties.class,
     WatsonPersonalityInsightsConfigurationProperties.class, WatsonSpeechToTextConfigurationProperties.class,
@@ -73,7 +75,7 @@ public class WatsonAutoConfiguration {
     return ConfigBasedAuthenticatorFactory.getAuthenticator(serviceName);
   }
 
-  // Watson Assistant service
+  // Watson Assistant service V1
 
   @Autowired
   private WatsonAssistantConfigurationProperties assistantConfig;
@@ -84,6 +86,22 @@ public class WatsonAutoConfiguration {
   public Assistant assistant() {
     Authenticator authConfig = configAuth(assistantConfig, "assistant");
     Assistant service = new Assistant(assistantConfig.getVersionDate(), authConfig);
+    configUrl(service, assistantConfig);
+    return service;
+  }
+
+  // Watson Assistant service V2
+
+  @Autowired
+  private WatsonAssistantV2ConfigurationProperties assistantV2Config;
+
+  @Bean
+  @ConditionalOnMissingBean
+  @ConditionalOnWatsonServiceProperties(prefix = WatsonAssistantV2ConfigurationProperties.PREFIX)
+  public com.ibm.watson.assistant.v2.Assistant assistantV2() {
+    Authenticator authConfig = configAuth(assistantV2Config, "assistant_v2");
+    com.ibm.watson.assistant.v2.Assistant service =
+            new com.ibm.watson.assistant.v2.Assistant(assistantV2Config.getVersionDate(), authConfig);
     configUrl(service, assistantConfig);
     return service;
   }
@@ -103,7 +121,7 @@ public class WatsonAutoConfiguration {
     return service;
   }
 
-  // Watson Discovery service
+  // Watson Discovery service V1
 
   @Autowired
   private WatsonDiscoveryConfigurationProperties discoveryConfig;
@@ -115,6 +133,22 @@ public class WatsonAutoConfiguration {
     Authenticator authConfig = configAuth(discoveryConfig, "discovery");
     Discovery service = new Discovery(discoveryConfig.getVersionDate(), authConfig);
     configUrl(service, discoveryConfig);
+    return service;
+  }
+
+  // Watson Discovery service V2
+
+  @Autowired
+  private WatsonDiscoveryV2ConfigurationProperties discoveryV2Config;
+
+  @Bean
+  @ConditionalOnMissingBean
+  @ConditionalOnWatsonServiceProperties(prefix = WatsonDiscoveryV2ConfigurationProperties.PREFIX)
+  public com.ibm.watson.discovery.v2.Discovery discoveryV2() {
+    Authenticator authConfig = configAuth(discoveryV2Config, "discovery_v2");
+    com.ibm.watson.discovery.v2.Discovery service =
+            new com.ibm.watson.discovery.v2.Discovery(discoveryV2Config.getVersionDate(), authConfig);
+    configUrl(service, discoveryV2Config);
     return service;
   }
 
