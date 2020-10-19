@@ -61,9 +61,6 @@ public class WatsonAutoConfigTest {
     assertNotNull(speechToText);
     assertEquals(url, speechToText.getServiceUrl());
 
-    assertEquals(Authenticator.AUTHTYPE_BASIC, speechToText.getAuthenticator().authenticationType());
-    BasicAuthenticator authenticator = (BasicAuthenticator) speechToText.getAuthenticator();
-    assertEquals(username, authenticator.getUsername());
-    assertEquals(password, authenticator.getPassword());
+    assertEquals(Authenticator.AUTHTYPE_IAM, speechToText.getAuthenticator().authenticationType());
   }
 }
