@@ -62,7 +62,7 @@ public class ToneAnalyzerAutoConfigTest {
       assertEquals(username, authenticator.getUsername());
       assertEquals(password, authenticator.getPassword());
 
-      Field versionField = ToneAnalyzer.class.getDeclaredField("versionDate");
+      Field versionField = ToneAnalyzer.class.getDeclaredField("version");
       versionField.setAccessible(true);
       assertEquals(versionDate, versionField.get(toneAnalyzer));
     } catch (NoSuchFieldException | IllegalAccessException ex) {

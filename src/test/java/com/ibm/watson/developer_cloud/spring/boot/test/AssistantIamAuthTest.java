@@ -59,7 +59,7 @@ public class AssistantIamAuthTest {
       IamAuthenticator authenticator = (IamAuthenticator) assistant.getAuthenticator();
       assertEquals(iamApiKey, authenticator.getApiKey());
 
-      Field versionField = Assistant.class.getDeclaredField("versionDate");
+      Field versionField = Assistant.class.getDeclaredField("version");
       versionField.setAccessible(true);
       assertEquals(versionDate, versionField.get(assistant));
     } catch (NoSuchFieldException | IllegalAccessException ex) {

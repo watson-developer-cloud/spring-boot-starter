@@ -62,7 +62,7 @@ public class CompareComplyAutoConfigTest {
       assertEquals(username, authenticator.getUsername());
       assertEquals(password, authenticator.getPassword());
 
-      Field versionField = CompareComply.class.getDeclaredField("versionDate");
+      Field versionField = CompareComply.class.getDeclaredField("version");
       versionField.setAccessible(true);
       assertEquals(versionDate, versionField.get(compareComply));
     } catch (NoSuchFieldException | IllegalAccessException ex) {

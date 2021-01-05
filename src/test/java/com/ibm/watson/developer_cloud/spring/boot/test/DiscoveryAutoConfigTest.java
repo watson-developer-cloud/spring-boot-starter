@@ -62,7 +62,7 @@ public class DiscoveryAutoConfigTest {
       assertEquals(username, authenticator.getUsername());
       assertEquals(password, authenticator.getPassword());
 
-      Field versionField = Discovery.class.getDeclaredField("versionDate");
+      Field versionField = Discovery.class.getDeclaredField("version");
       versionField.setAccessible(true);
       assertEquals(versionDate, versionField.get(discovery));
     } catch (NoSuchFieldException | IllegalAccessException ex) {

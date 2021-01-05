@@ -34,6 +34,9 @@ public class WatsonConfigurationProperties {
   /** Watson service versionDate. */
   private String versionDate;
 
+  /** Watson service bearerToken. */
+  private String bearerToken;
+
   public void setUrl(String url) {
     this.url = url;
   }
@@ -58,6 +61,10 @@ public class WatsonConfigurationProperties {
     this.versionDate = versionDate;
   }
 
+  public void setBearerToken(String bearerToken) {
+    this.bearerToken = bearerToken;
+  }
+
   public String getUrl() {
     return this.url;
   }
@@ -80,5 +87,9 @@ public class WatsonConfigurationProperties {
 
   public String getVersionDate() {
     return this.versionDate;
+  }
+
+  public String getBearerToken() {
+    return this.bearerToken;
   }
 }

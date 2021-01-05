@@ -58,7 +58,7 @@ public class VisualRecognitionAutoConfigTest {
       WatsonApiKeyAuthenticator authenticator = (WatsonApiKeyAuthenticator) visualRecognition.getAuthenticator();
       assertEquals(apiKey, authenticator.getApiKey());
 
-      Field versionField = VisualRecognition.class.getDeclaredField("versionDate");
+      Field versionField = VisualRecognition.class.getDeclaredField("version");
       versionField.setAccessible(true);
       assertEquals(versionDate, versionField.get(visualRecognition));
     } catch (NoSuchFieldException | IllegalAccessException ex) {

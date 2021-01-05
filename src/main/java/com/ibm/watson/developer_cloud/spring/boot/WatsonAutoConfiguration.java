@@ -16,6 +16,7 @@ package com.ibm.watson.developer_cloud.spring.boot;
 
 import com.ibm.cloud.sdk.core.security.Authenticator;
 import com.ibm.cloud.sdk.core.security.BasicAuthenticator;
+import com.ibm.cloud.sdk.core.security.BearerTokenAuthenticator;
 import com.ibm.cloud.sdk.core.security.ConfigBasedAuthenticatorFactory;
 import com.ibm.cloud.sdk.core.security.IamAuthenticator;
 import com.ibm.cloud.sdk.core.service.BaseService;
@@ -69,6 +70,10 @@ public class WatsonAutoConfiguration {
     if (apiKey != null) {
       return new WatsonApiKeyAuthenticator(apiKey);
     }
+    String bearerToken = config.getBearerToken();
+    if (bearerToken != null) {
+      return new BearerTokenAuthenticator(bearerToken);
+    }
 
     // If we can't find the right properties, we'll return what we get from the auth config factory, which will
     // pull from things like VCAP_SERVICES.
@@ -99,7 +104,7 @@ public class WatsonAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonAssistantV2ConfigurationProperties.PREFIX)
   public com.ibm.watson.assistant.v2.Assistant assistantV2() {
-    Authenticator authConfig = configAuth(assistantV2Config, "assistant_v2");
+    Authenticator authConfig = configAuth(assistantV2Config, "assistant");
     com.ibm.watson.assistant.v2.Assistant service =
             new com.ibm.watson.assistant.v2.Assistant(assistantV2Config.getVersionDate(), authConfig);
     configUrl(service, assistantConfig);
@@ -145,7 +150,7 @@ public class WatsonAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnWatsonServiceProperties(prefix = WatsonDiscoveryV2ConfigurationProperties.PREFIX)
   public com.ibm.watson.discovery.v2.Discovery discoveryV2() {
-    Authenticator authConfig = configAuth(discoveryV2Config, "discovery_v2");
+    Authenticator authConfig = configAuth(discoveryV2Config, "discovery");
     com.ibm.watson.discovery.v2.Discovery service =
             new com.ibm.watson.discovery.v2.Discovery(discoveryV2Config.getVersionDate(), authConfig);
     configUrl(service, discoveryV2Config);

@@ -62,7 +62,7 @@ public class AssistantAutoConfigTest {
       assertEquals(username, authenticator.getUsername());
       assertEquals(password, authenticator.getPassword());
 
-      Field versionField = Assistant.class.getDeclaredField("versionDate");
+      Field versionField = Assistant.class.getDeclaredField("version");
       versionField.setAccessible(true);
       assertEquals(versionDate, versionField.get(assistant));
     } catch (NoSuchFieldException | IllegalAccessException ex) {

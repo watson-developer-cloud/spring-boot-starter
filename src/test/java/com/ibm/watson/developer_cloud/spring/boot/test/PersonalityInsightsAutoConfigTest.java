@@ -62,7 +62,7 @@ public class PersonalityInsightsAutoConfigTest {
       assertEquals(username, authenticator.getUsername());
       assertEquals(password, authenticator.getPassword());
 
-      Field versionField = PersonalityInsights.class.getDeclaredField("versionDate");
+      Field versionField = PersonalityInsights.class.getDeclaredField("version");
       versionField.setAccessible(true);
       assertEquals(versionDate, versionField.get(personalityInsights));
     } catch (NoSuchFieldException | IllegalAccessException ex) {

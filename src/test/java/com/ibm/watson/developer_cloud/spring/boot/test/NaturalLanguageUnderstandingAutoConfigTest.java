@@ -64,7 +64,7 @@ public class NaturalLanguageUnderstandingAutoConfigTest {
       assertEquals(username, authenticator.getUsername());
       assertEquals(password, authenticator.getPassword());
 
-      Field versionField = NaturalLanguageUnderstanding.class.getDeclaredField("versionDate");
+      Field versionField = NaturalLanguageUnderstanding.class.getDeclaredField("version");
       versionField.setAccessible(true);
       assertEquals(versionDate, versionField.get(naturalLanguageUnderstanding));
     } catch (NoSuchFieldException | IllegalAccessException ex) {
