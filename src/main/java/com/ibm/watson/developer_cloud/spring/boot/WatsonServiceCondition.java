@@ -26,8 +26,10 @@ public class WatsonServiceCondition implements Condition {
     String apiKey = conditionContext.getEnvironment().getProperty(prefix + ".apiKey");
     String iamApiKey = conditionContext.getEnvironment().getProperty(prefix + ".iamApiKey");
     String versionDate = conditionContext.getEnvironment().getProperty(prefix + ".versionDate");
+    String bearerToken = conditionContext.getEnvironment().getProperty(prefix + ".bearerToken");
+
     if (url != null || username != null || password != null || versionDate != null
-            || apiKey != null || iamApiKey != null) {
+            || apiKey != null || iamApiKey != null || bearerToken != null) {
       return true;
     }
 
