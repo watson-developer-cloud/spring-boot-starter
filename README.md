@@ -20,13 +20,13 @@ All you need to do is:
     <dependency>
       <groupId>com.ibm.watson.developer_cloud</groupId>
       <artifactId>watson-spring-boot-starter</artifactId>
-      <version>2.3.2</version>
+      <version>2.3.3</version>
     </dependency>
     ```
 
     or in your gradle `build.gradle`, in the dependencies stanza, add
     ```
-    compile 'com.ibm.watson.developer_cloud:watson-spring-boot-starter:2.3.2'
+    compile 'com.ibm.watson.developer_cloud:watson-spring-boot-starter:2.3.3'
     ```
 
 2. Add your Watson service(s) credentials and version info to your application
