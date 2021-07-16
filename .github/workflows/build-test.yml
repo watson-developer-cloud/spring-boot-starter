@@ -38,9 +38,9 @@ jobs:
 
     - name: Build and Execute Spring boot unit tests
       run: |
-        gradlew check
-        gradlew install -x check
-        gradlew codeCoverageReport --continue
+        ./gradlew check
+        ./gradlew install -x check
+        ./gradlew codeCoverageReport --continue
 
     - name: Publish Spring boot code coverage
       run: bash <(curl -s https://codecov.io/bash)
