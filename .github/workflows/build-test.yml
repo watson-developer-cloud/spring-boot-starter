@@ -1,0 +1,46 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support documentation.
+# This workflow will do a clean install of java dependencies
+# For more information see: https://docs.github.com/en/actions/guides/building-and-testing-java-with-maven
+
+name: Build and Test
+
+on:
+  push:
+    branches: [ '**' ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build_test:
+    name: Build and Test on Java ${{ matrix.java-version }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java-version: ['8']
+        os: [ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Java
+      uses: actions/setup-java@v2
+      with:
+        java-version: ${{ matrix.java-version }}
+        distribution: 'adopt'
+
+    - name: Install dependencies
+      run: echo hello
+
+    - name: Build and Execute Spring boot unit tests
+      run: |
+        gradlew check
+        gradlew install -x check
+        gradlew codeCoverageReport --continue
+
+    - name: Publish Spring boot code coverage
+      run: bash <(curl -s https://codecov.io/bash)
