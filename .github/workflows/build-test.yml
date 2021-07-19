@@ -38,6 +38,7 @@ jobs:
 
     - name: Build and Execute Spring boot unit tests
       run: |
+        ./gradlew assemble
         ./gradlew check
         ./gradlew install -x check
         ./gradlew codeCoverageReport --continue
