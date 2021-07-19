@@ -35,13 +35,13 @@ jobs:
 
     - name: Build and Execute Spring boot unit tests
       run: |
-        echo "gradlew assemble"
+        echo -e "\nCommand: gradlew assemble"
         ./gradlew assemble
-        echo "gradlew check"
+        echo -e "\nCommand: gradlew check"
         ./gradlew check
-        echo "gradlew install -x check"
+        echo -e "\nCommand: gradlew install -x check"
         ./gradlew install -x check
-        echo "gradlew codeCoverageReport --continue"
+        echo -e "\nCommand: gradlew codeCoverageReport --continue"
         ./gradlew codeCoverageReport --continue
 
     - name: Publish Spring boot code coverage
