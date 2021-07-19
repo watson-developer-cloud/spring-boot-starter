@@ -33,9 +33,6 @@ jobs:
         java-version: ${{ matrix.java-version }}
         distribution: 'adopt'
 
-    - name: Install dependencies
-      run: echo hello
-
     - name: Build and Execute Spring boot unit tests
       run: |
         ./gradlew assemble
