@@ -1,0 +1,47 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support documentation.
+# This workflow will download a prebuilt Java version, install dependencies, build and deploy/publish a new release
+
+name: Deploy and Publish
+
+on:
+  push:
+    branches: [ '**' ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    name: Deploy and Publish
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+
+    - name: Set up Java
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+        distribution: 'adopt'
+
+    - name: Build Spring boot package
+      run: |
+        echo -e "\nCommand: gradlew assemble"
+        ./gradlew assemble
+        echo -e "\nCommand: gradlew check"
+        ./gradlew check
+        echo -e "\nCommand: gradlew install -x check"
+        ./gradlew install -x check
+
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+
+    - name: Before Install
+      run:  sed -i.bak -e 's|https://nexus.codehaus.org/snapshots/|https://oss.sonatype.org/content/repositories/codehaus-snapshots/|g' ~/.m2/settings.xml
