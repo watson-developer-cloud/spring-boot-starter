@@ -52,5 +52,4 @@ jobs:
       run: scripts/deploy.sh
 
     - name: Error on deploy
-      if: !startsWith(github.ref, 'refs/tags/v')
       run: echo -e "\nSkipping a deployment with the script provider because this is not a tagged commit\n"
