@@ -38,10 +38,19 @@ jobs:
         echo -e "\nCommand: gradlew install -x check"
         ./gradlew install -x check
 
-    - name: Setup Node
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12
-
     - name: Before Install
       run:  sed -i.bak -e 's|https://nexus.codehaus.org/snapshots/|https://oss.sonatype.org/content/repositories/codehaus-snapshots/|g' ~/.m2/settings.xml
+
+    - name: Publish/Deploy to Git and Maven Central
+      if: startsWith(github.ref, 'refs/tags/v')
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+        encrypted_c32defe8b915_key: ${{ secrets.encrypted_c32defe8b915_key }}
+        encrypted_c32defe8b915_iv: ${{ secrets.encrypted_c32defe8b915_iv }}
+      run: scripts/deploy.sh
+
+    - name: Publish/Deploy to Git and Maven Central
+      if: !startsWith(github.ref, 'refs/tags/v')
+      run: echo -e "\nSkipping a deployment with the script provider because this is not a tagged commit\n"
