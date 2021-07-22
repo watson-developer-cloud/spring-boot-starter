@@ -41,6 +41,10 @@ jobs:
     - name: Before Install
       run:  sed -i.bak -e 's|https://nexus.codehaus.org/snapshots/|https://oss.sonatype.org/content/repositories/codehaus-snapshots/|g' ~/.m2/settings.xml
 
+    - name: Get the version tag
+      id: get_version_tag
+      run: echo ::set-output name=VERSIONTAG::${GITHUB_REF/refs\/tags\//}
+
     - name: Publish/Deploy to Maven Central
       if: "startsWith(github.ref, 'refs/tags/v')"
       env:
@@ -52,10 +56,20 @@ jobs:
 
     - name: Publish/Deploy to Git
       if: "startsWith(github.ref, 'refs/tags/v')"
+      id: create_release
+      uses: actions/create-release@latest
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      run: echo -e "\nTODO\n"
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          ${{ steps.Changelog.outputs.changelog }}
+        draft: false
+        prerelease: false
 
     - name: SKIP - Publish/Deploy to Git and Maven Central
       if: "!startsWith(github.ref, 'refs/tags/v')"
-      run: echo -e "\nSkipping a deployment with the script provider because this is not a tagged commit - ${GITHUB_REF}\n"
+      run: |
+        echo -e "\nSkipping a deployment with the script provider because this is not a tagged commit - ${GITHUB_REF}\n"
+        echo ${{ steps.get_version_tag.outputs.VERSIONTAG }}
