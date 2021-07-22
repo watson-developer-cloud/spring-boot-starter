@@ -50,9 +50,8 @@ jobs:
       env:
         SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-        encrypted_c32defe8b915_key: ${{ secrets.encrypted_c32defe8b915_key }}
-        encrypted_c32defe8b915_iv: ${{ secrets.encrypted_c32defe8b915_iv }}
-      run: scripts/deploy.sh
+        SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
+      run: scripts/deploy_gha.sh
 
     - name: Publish/Deploy to Git
       if: "startsWith(github.ref, 'refs/tags/v')"
