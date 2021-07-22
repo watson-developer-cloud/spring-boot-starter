@@ -43,7 +43,7 @@ jobs:
 
     - name: Get the version tag
       id: get_version_tag
-      run: ::set-output name=SOURCE_TAG::$(echo $GITHUB_REF | cut -d / -f 3)
+      run: echo ::set-output name=SOURCE_TAG::$(echo $GITHUB_REF | cut -d / -f 3)
 
     - name: Publish/Deploy to Maven Central
       if: "startsWith(github.ref, 'refs/tags/v')"
