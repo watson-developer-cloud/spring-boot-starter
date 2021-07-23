@@ -62,7 +62,6 @@ jobs:
         prerelease: true
         draft: true
         files: build/libs/watson-spring-boot-starter-${{ steps.get_version_tag.outputs.SOURCE_TAG }}-jar-with-dependencies.jar
-        repo: watson-developer-cloud/spring-boot-starter
 
     - name: SKIP - Publish/Deploy to Git and Maven Central
       if: "!startsWith(github.ref, 'refs/tags/v')"
