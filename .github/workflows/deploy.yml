@@ -1,6 +1,6 @@
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support documentation
+# separate terms of service, privacy policy, and support documentation.
 # This workflow will download a prebuilt Java version, install dependencies, build and deploy/publish a new release
 
 name: Deploy and Publish
