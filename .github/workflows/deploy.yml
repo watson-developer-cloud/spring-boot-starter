@@ -46,7 +46,7 @@ jobs:
       run: echo ::set-output name=SOURCE_TAG::$(echo $GITHUB_REF | cut -d / -f 3)
 
     - name: Publish/Deploy to Maven Central
-      if: "!startsWith(github.ref, 'refs/tags/v')"
+      if: "startsWith(github.ref, 'refs/tags/v')"
       env:
         SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
@@ -61,8 +61,8 @@ jobs:
       with:
         repo_token: ${{ secrets.GH_TOKEN }}
         automatic_release_tag: ${{ steps.get_version_tag.outputs.SOURCE_TAG }}
-        prerelease: true
-        draft: true
+        prerelease: false
+        draft: false
         files: build/libs/watson-spring-boot-starter-${{ steps.get_version_tag.outputs.SOURCE_TAG }}-jar-with-dependencies.jar
 
     - name: SKIP - Publish/Deploy to Git and Maven Central
