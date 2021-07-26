@@ -46,11 +46,13 @@ jobs:
       run: echo ::set-output name=SOURCE_TAG::$(echo $GITHUB_REF | cut -d / -f 3)
 
     - name: Publish/Deploy to Maven Central
-      if: "startsWith(github.ref, 'refs/tags/v')"
+      if: "!startsWith(github.ref, 'refs/tags/v')"
       env:
         SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
         SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
+        CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
+        CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
       run: scripts/deploy_gha.sh
 
     - name: Publish/Deploy to Git
