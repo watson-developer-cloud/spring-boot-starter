@@ -29,6 +29,13 @@ If you are not familiar with Sonatype and/or the maven release process please re
      ```bash
      bumpversion major|minor|patch
      ```
+  2. Create a new branch that matches the new version bumpversion has updated/returned in step 1.
+     The branch should be named vx.x.x (ie, v3.2.2).  The branch name acts like the commit message
+     in semantic release and will trigger the release.
+
+     ```bash
+     Branch name should follow the convention of vx.x.x (ie, v3.2.2).  
+     ```
 
 ### Travis setup
 
