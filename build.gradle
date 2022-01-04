@@ -110,7 +110,9 @@ dependencies {
 
     // testing
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile 'com.github.stefanbirkner:system-rules:1.19.0'
+    testCompile ('com.github.stefanbirkner:system-rules:1.19.0') {
+        exclude group:"junit" , module:"junit-dep"
+    }
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
 }
 
