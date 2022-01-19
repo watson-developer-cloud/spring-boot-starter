@@ -54,6 +54,6 @@ jobs:
         echo ${{ steps.get_version_tag.outputs.SOURCE_TAG }}
 
     - name: SKIP - Publish/Deploy to Git and Maven Central
-      if: ${{ steps.new_release.outputs.NEW_RELEASE == 0}}
+      if: ${{ steps.new_release.outputs.NEW_RELEASE == 1}}
       run: |
         echo -e "\nSkipping a deployment with the script provider because this is not a tagged branch (vx.x.x) - ${GITHUB_REF}\n"
