@@ -61,7 +61,7 @@ jobs:
         automatic_release_tag: ${{ steps.get_version_tag.outputs.SOURCE_TAG }}
         prerelease: false
         draft: false
-        files: build/libs/watson-spring-boot-starter-${{ steps.get_version_tag.outputs.SOURCE_TAG }}-jar-with-dependencies.jar
+        files: build/libs/watson-spring-boot-starter-2.3.6-jar-with-dependencies.jar
 
     - name: SKIP - Publish/Deploy to Git and Maven Central
       if: ${{ steps.new_release.outputs.NEW_RELEASE == 1}}
