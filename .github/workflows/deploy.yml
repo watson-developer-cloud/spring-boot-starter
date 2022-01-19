@@ -53,6 +53,26 @@ jobs:
         echo ::set-output name=NEW_RELEASE::$(echo "refs/heads/v2.3.6" | grep -ciP "refs/heads/v\K[0-9]+\.[0-9]+\.[0-9]+")
         echo ${{ steps.get_version_tag.outputs.SOURCE_TAG }}
 
+    - name: Publish/Deploy to Maven Central
+      if: ${{ steps.new_release.outputs.NEW_RELEASE == 1}}
+      env:
+        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+        SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
+        CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
+        CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
+      run: scripts/deploy_gha.sh
+
+    - name: Publish/Deploy to Git
+      if: ${{ steps.new_release.outputs.NEW_RELEASE == 1}}
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        repo_token: ${{ secrets.GH_TOKEN }}
+        automatic_release_tag: ${{ steps.get_version_tag.outputs.SOURCE_TAG }}
+        prerelease: false
+        draft: false
+        files: build/libs/watson-spring-boot-starter-${{ steps.get_version_tag.outputs.SOURCE_TAG }}-jar-with-dependencies.jar
+
     - name: SKIP - Publish/Deploy to Git and Maven Central
       if: ${{ steps.new_release.outputs.NEW_RELEASE == 1}}
       run: |
