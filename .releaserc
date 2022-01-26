@@ -1,0 +1,21 @@
+{
+  "branch": "master",
+  "verifyConditions": ["@semantic-release/changelog", "@semantic-release/github"],
+  "debug": true,
+  "prepare": [
+    {
+      "path": "@semantic-release/exec",
+      "cmd": "bumpversion --allow-dirty --current-version ${lastRelease.version} --new-version ${nextRelease.version} patch"
+    },
+    "@semantic-release/changelog",
+    "@semantic-release/git"
+  ],
+  "publish": [
+    {
+      "path": "@semantic-release/github",
+      "assets": [
+        {"path": "build/libs/watson-spring-boot-starter-${nextRelease.version}-jar-with-dependencies.jar"}
+      ]
+    }
+  ]
+}
