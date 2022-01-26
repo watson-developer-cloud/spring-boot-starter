@@ -69,13 +69,13 @@ jobs:
         SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
         CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
         CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
-      run: echo scripts/deploy_gha.sh
+      run: scripts/deploy_gha.sh
 
     - name: Publish to Git Releases and Tags
       if: ${{ steps.is_new_release.outputs.IS_NEW_RELEASE == 1 }}
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      run: npx semantic-release --dry-run --branches gha_9995
+      run: npx semantic-release # --dry-run --branches gha_9995
 
     - name: SKIP - Publish/Deploy to Git and Maven Central
       if: ${{ steps.is_new_release.outputs.IS_NEW_RELEASE == 0}}
