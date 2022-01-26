@@ -69,7 +69,7 @@ jobs:
         SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
         CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
         CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
-      run: echo scripts/deploy_gha.sh
+      run: scripts/deploy_gha.sh
 
     - name: Publish to Git Releases and Tags
       if: ${{ steps.is_new_release.outputs.IS_NEW_RELEASE == 1 }}
