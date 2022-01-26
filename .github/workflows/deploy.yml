@@ -62,7 +62,7 @@ jobs:
 
     # Only run a real semantic release if the dry-run identified a new release
     - name: Publish to Git Releases and Tags
-      if: ${{ steps.is_new_release.outputs.IS_NEW_RELEASE == 1 }}
+      if: ${{ steps.is_new_release.outputs.IS_NEW_RELEASE == 0 }}
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       run: npx semantic-release --dry-run --branches gha_9995
