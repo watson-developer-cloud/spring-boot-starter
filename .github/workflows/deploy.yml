@@ -44,18 +44,26 @@ jobs:
     - name: Before Install
       run:  sed -i.bak -e 's|https://nexus.codehaus.org/snapshots/|https://oss.sonatype.org/content/repositories/codehaus-snapshots/|g' ~/.m2/settings.xml
 
-    - name: Get the version tag
-      id: get_version_tag
-      run: echo ::set-output name=SOURCE_TAG::$(echo $GITHUB_REF | cut -d / -f 3)
-
-    - name: Check if branch is a version tag
-      id: new_release
+    - name: Install Semantic Release
       run: |
-        echo ::set-output name=NEW_RELEASE::$(echo ${{ github.ref }} | grep -ciP "refs/heads/v\K[0-9]+\.[0-9]+\.[0-9]+")
-        echo ${{ steps.get_version_tag.outputs.SOURCE_TAG }}
+        sudo apt-get install bumpversion
+        npm install -g semantic-release
+        npm install -g @semantic-release/changelog
+        npm install -g @semantic-release/exec
+        npm install -g @semantic-release/git
+        npm install -g @semantic-release/github
+        npm install -g @semantic-release/commit-analyzer
+        npm install -g @semantic-release/release-notes-generator
 
+    - name: Check if semantic release generated a release
+      id: is_new_release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: echo ::set-output name=IS_NEW_RELEASE::$(npx semantic-release --dry-run | grep -c -i "Published release")
+
+    # Only run a real semantic release if the dry-run identified a new release
     - name: Publish/Deploy to Maven Central
-      if: ${{ steps.new_release.outputs.NEW_RELEASE == 1}}
+      if: ${{ steps.is_new_release.outputs.IS_NEW_RELEASE == 1}}
       env:
         SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
@@ -64,17 +72,13 @@ jobs:
         CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
       run: scripts/deploy_gha.sh
 
-    - name: Publish/Deploy to Git
-      if: ${{ steps.new_release.outputs.NEW_RELEASE == 1}}
-      uses: marvinpinto/action-automatic-releases@latest
-      with:
-        repo_token: ${{ secrets.GH_TOKEN }}
-        automatic_release_tag: ${{ steps.get_version_tag.outputs.SOURCE_TAG }}
-        prerelease: false
-        draft: false
-        files: build/libs/watson-spring-boot-starter-${{ steps.get_version_tag.outputs.SOURCE_TAG }}-jar-with-dependencies.jar
+    - name: Publish to Git Releases and Tags
+      if: ${{ steps.is_new_release.outputs.IS_NEW_RELEASE == 1 }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: npx semantic-release # --dry-run --branches gha_9995
 
     - name: SKIP - Publish/Deploy to Git and Maven Central
-      if: ${{ steps.new_release.outputs.NEW_RELEASE == 0}}
+      if: ${{ steps.is_new_release.outputs.IS_NEW_RELEASE == 0}}
       run: |
-        echo -e "\nSkipping a deployment with the script provider because this is not a tagged branch (vx.x.x) - ${GITHUB_REF}\n"
+        echo -e "\n\033[0;35mCommand: Skipping the deployment because semantic release has determined there are no relevant changes that warrent a new release.\n"
