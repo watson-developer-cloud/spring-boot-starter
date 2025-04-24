@@ -5,8 +5,8 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ibm.watson.developer_cloud/watson-spring-boot-starter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ibm.watson.developer_cloud/watson-spring-boot-starter)
 [![CLA assistant](https://cla-assistant.io/readme/badge/watson-developer-cloud/spring-boot-starter)](https://cla-assistant.io/watson-developer-cloud/spring-boot-starter)
 
-## Deprecated builds
-[![Build Status](https://travis-ci.org/watson-developer-cloud/spring-boot-starter.svg?branch=master)](https://travis-ci.org/watson-developer-cloud/spring-boot-starter)
+## Deprecation Notice
+This repo and the maven/gradle packages associated with it are being deprecated. This repo will no longer see active support from the IBM team and will be archived on July 24th.
 
 This project adds Spring Boot support for the Watson services.
 
